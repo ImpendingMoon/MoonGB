@@ -1,6 +1,6 @@
 # MoonGB
 
-#### Yet another Gameboy Emulator!
+- Yet another Gameboy Emulator!
 
 This may or may not be my fourth attempt at writing a Gameboy emulator, but shh...
 
@@ -13,15 +13,19 @@ At the moment, I'm primarily focusing on getting a somewhat decent user experien
 1) Have a working Gameboy emulator (duh)
 2) Have a decent GUI
 3) Support most memory mappers and persistent saves
-4) Implement most memory mappers
-5) Support color palettes
-6) Support remapping keys
-7) Implement Gameboy Color compatibility
+4) Support color palettes
+5) Support remapping keys
+6) Implement Gameboy Color compatibility
 
-## Building
-MoonGB is primarily developed on Linux, and although I will try to include Windows support where needed, there is no guarantee that it will run on Windows.
-
-#### Dependencies:
+## Dependencies:
 1) SDL2 - Version 2.26 or higher
 2) SDL2_ttf - Version 2.20 or higher
 3) {fmt} - Version 9.0.0 or higher
+
+## Building:
+1) Clone repo into a new folder
+2) Ensure all dependencies are installed
+3) Create a separate build directory
+4) Run cmake --DCMAKE_BUILD_TYPE="Release" <path_to_repo_directory>
+5) Run Make/Ninja
+6) Enjoy
