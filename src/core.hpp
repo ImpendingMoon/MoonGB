@@ -6,3 +6,4 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <fmt/core.h>

@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/leifs/Programming/C++/MoonGB/build",
+  "command": "/usr/bin/c++ -DFMT_SHARED -isystem /usr/include/SDL2 -Wall -Wpedantic -O0 -g -std=gnu++20 -o CMakeFiles/MoonGB.dir/src/main.cpp.o -c /home/leifs/Programming/C++/MoonGB/src/main.cpp",
+  "file": "/home/leifs/Programming/C++/MoonGB/src/main.cpp"
+},
+{
+  "directory": "/home/leifs/Programming/C++/MoonGB/build",
+  "command": "/usr/bin/c++ -DFMT_SHARED -isystem /usr/include/SDL2 -Wall -Wpedantic -O0 -g -std=gnu++20 -o CMakeFiles/MoonGB.dir/src/program/config.cpp.o -c /home/leifs/Programming/C++/MoonGB/src/program/config.cpp",
+  "file": "/home/leifs/Programming/C++/MoonGB/src/program/config.cpp"
+},
+{
+  "directory": "/home/leifs/Programming/C++/MoonGB/build",
+  "command": "/usr/bin/c++ -DFMT_SHARED -isystem /usr/include/SDL2 -Wall -Wpedantic -O0 -g -std=gnu++20 -o CMakeFiles/MoonGB.dir/src/program/logger.cpp.o -c /home/leifs/Programming/C++/MoonGB/src/program/logger.cpp",
+  "file": "/home/leifs/Programming/C++/MoonGB/src/program/logger.cpp"
+},
+{
+  "directory": "/home/leifs/Programming/C++/MoonGB/build",
+  "command": "/usr/bin/c++ -DFMT_SHARED -isystem /usr/include/SDL2 -Wall -Wpedantic -O0 -g -std=gnu++20 -o CMakeFiles/MoonGB.dir/src/program/window.cpp.o -c /home/leifs/Programming/C++/MoonGB/src/program/window.cpp",
+  "file": "/home/leifs/Programming/C++/MoonGB/src/program/window.cpp"
+}
+]

@@ -4,20 +4,23 @@
 
 #include "../core.hpp"
 #include <SDL2/SDL.h>
-#include <filesystem>
 
 namespace Config
 {
 
+// NOTE: A dictionary might be better for this.
 enum Options
 {
+    // Boolean
+    LOG_TO_STDOUT,
+    LOG_TO_LOGFILE,
     // String
     PREF_PATH,
     // Numeric
     LAST_WIN_X,
     LAST_WIN_Y,
+    LOG_LEVEL,
     // Misc.
-    // Handled in specific functions, here for completeness
     COLOR_PALETTE
 };
 
@@ -27,6 +30,8 @@ void loadConfigFile();
 // Attempts to save current config options to a file
 // Returns -1 if failed
 int saveConfigFile();
+
+void closeConfigFile();
 
 // Reset option(s) to default values
 void resetAllOptions();
@@ -40,6 +45,14 @@ int getLastWinX();
 int setLastWinX(int value);
 int getLastWinY();
 int setLastWinY(int value);
+
+bool isLogToStdout();
+void setLogToStdout(bool value);
+bool isLogToLogFile();
+void setLogToLogFile(bool value);
+
+int getLogLevel();
+void setLogLevel(int value);
 
 // Returns an array of four colors used for the color palette
 // In ascending order from BG to Tile0-Tile3

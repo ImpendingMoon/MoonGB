@@ -19,8 +19,7 @@ At the moment, I'm primarily focusing on getting a somewhat decent user experien
 
 ## Dependencies:
 1) SDL2 - Version 2.26 or higher
-2) SDL2_ttf - Version 2.20 or higher
-3) {fmt} - Version 9.0.0 or higher
+2) {fmt} - Version 9.0.0 or higher
 
 ## Building:
 1) Clone repo into a new folder

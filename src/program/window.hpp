@@ -3,23 +3,16 @@
 #pragma once
 
 #include "../core.hpp"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
-class Window
+namespace Window
 {
-public:
-    Window();
-    Window(const std::string& title, SDL_Color bg_color);
+    void initWindow();
+    void closeWindow();
 
-private:
-    // The minimum window dimensions, set to GB resolution
-    static constexpr uint32_t MIN_X_SIZE = 160;
-    static constexpr uint32_t MIN_Y_SIZE = 144;
+    void updateWindow();
+    void clearWindow();
 
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    // Pulls the color palette from the Config
+    void refreshColorPalette();
 
-    std::string title;
-    SDL_Color bg_color;
 };
