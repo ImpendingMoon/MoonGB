@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "../core.hpp"
+
 namespace Program
 {
 enum ProgramStates
