@@ -36,13 +36,13 @@ int Logger::initLogger()
 	using std::filesystem::create_directories;
     using std::filesystem::filesystem_error;
 
-	log_file_path = Config::getPrefPath();
+    log_file_path = Config::getOption("PrefPath");
 
     try {
         if(!exists(log_file_path)) { create_directories(log_file_path); }
 
     } catch(filesystem_error& ex) {
-        cerr << "ERROR: Cannot create log file directory!\n";
+        cerr << "LOGGER: Cannot create log file directory!\n";
         cerr << "Log file path: " << log_file_path << "\n";
         cerr << ex.what() << "\n";
 
@@ -54,13 +54,14 @@ int Logger::initLogger()
 
     if(!LogFile.is_open())
     {
-        cerr << "ERROR: Cannot open log file!\n";
+        cerr << "LOGGER: Cannot open log file!\n";
         return -1;
     }
 
 	return 0;
 }
 
+// Closes the LogFile to properly clear buffers
 void Logger::closeLogger()
 {
     if(LogFile.is_open())
@@ -81,7 +82,7 @@ void Logger::log(const std::string& message, LogLevel level)
 		}
 		if(log_to_logfile)
 		{
-			// TODO: Log to logfile
+            LogFile << getTimestamp() << " " + message + "\n";
 		}
 	}
 }

@@ -17,6 +17,7 @@ enum ProgramStates
 void initProgram();
 // NOTE: The program loop is run on the same thread function is called in
 void beginProgramLoop();
+// Exits all program subcomponents
 void quitProgram();
 
 ProgramStates getProgramState();

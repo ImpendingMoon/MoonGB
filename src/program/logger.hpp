@@ -22,6 +22,7 @@ enum LogLevel
 // Use to initialize logger AFTER config has loaded
 int initLogger();
 
+// Closes the LogFile to properly clear buffers
 void closeLogger();
 
 // Puts a message in the console and/or log file.

@@ -8,6 +8,7 @@
 
 using std::string;
 using Logger::log;
+using Config::getOption;
 using fmt::format;
 
 static constexpr int GB_X_RES = 160;
@@ -21,17 +22,19 @@ std::array<SDL_Color, 5> color_palette;
 
 void Window::initWindow()
 {
+    using std::stoi;
+
     int err;
 
     title = "MoonGB";
-    color_palette = Config::getColorPalette();
+    refreshColorPalette();
 
     window = SDL_CreateWindow(
              title.c_str(),
              SDL_WINDOWPOS_UNDEFINED,
              SDL_WINDOWPOS_UNDEFINED,
-             Config::getLastWinX(),
-             Config::getLastWinY(),
+             stoi(getOption("WinSizeX")),
+             stoi(getOption("WinSizeY")),
              0
              | SDL_WINDOW_SHOWN
              | SDL_WINDOW_RESIZABLE
@@ -40,7 +43,7 @@ void Window::initWindow()
 
     if(window == NULL)
     {
-        log(format("Could not create window in Window::initWindow! {:s}",
+        log(format("WINDOW: Could not create window! {:s}",
                     SDL_GetError()), Logger::ERROR);
         exit(1);
     }
@@ -53,17 +56,17 @@ void Window::initWindow()
 
     if(renderer == NULL)
     {
-        log(format("Could not create renderer in Window::initWindow! {:s}",
+        log(format("WINDOW: Could not create renderer! {:s}",
                     SDL_GetError()), Logger::ERROR);
         exit(1);
     }
 
-    // Have SDL do NN-scaling to handle resizing, entire program is GB-resolution
+    // Have SDL use nearest-neighbor scaling to handle resizing.
     err = SDL_RenderSetLogicalSize(renderer, GB_X_RES, GB_Y_RES);
 
     if(err != 0)
     {
-        log(format("Could not set logical size in Window::initWindow! {:s}",
+        log(format("WINDOW: Could not set logical size! {:s}",
                     SDL_GetError()), Logger::ERROR);
         exit(1);
     }
@@ -76,15 +79,16 @@ void Window::initWindow()
 
     if(err != 0)
     {
-        log(format("Could not set bg draw color in Window::initWindow! {:s} ",
+        log(format("WINDOW: Could not set bg draw color in initWindow()! {:s} ",
                    SDL_GetError()), Logger::ERROR);
         exit(1);
     }
 
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
-}
 
+    log("WINDOW: Window successfully created.", Logger::VERBOSE);
+}
 
 
 void Window::closeWindow()
@@ -96,6 +100,7 @@ void Window::closeWindow()
 
 
 
+// Wrapper for SDL_RenderPresent()
 void Window::updateWindow()
 {
     SDL_RenderPresent(renderer);
@@ -103,6 +108,7 @@ void Window::updateWindow()
 
 
 
+// Wrapper for SDL_RenderPresent()
 void Window::clearWindow()
 {
     SDL_Color color = color_palette[0];
@@ -112,7 +118,11 @@ void Window::clearWindow()
 
 
 
+// Pulls the color palette from the Config, will display next clear+update
 void Window::refreshColorPalette()
 {
-    color_palette = Config::getColorPalette();
+    using Config::stringToPalette, Config::getOption;
+    color_palette = stringToPalette(getOption("ColorPalette"));
+
+    log("WINDOW: Loaded color palette from config.", Logger::VERBOSE);
 }

@@ -3,26 +3,11 @@
 #pragma once
 
 #include "../core.hpp"
+#include <map>
 #include <SDL2/SDL.h>
 
 namespace Config
 {
-
-// NOTE: A dictionary might be better for this.
-enum Options
-{
-    // Boolean
-    LOG_TO_STDOUT,
-    LOG_TO_LOGFILE,
-    // String
-    PREF_PATH,
-    // Numeric
-    LAST_WIN_X,
-    LAST_WIN_Y,
-    LOG_LEVEL,
-    // Misc.
-    COLOR_PALETTE
-};
 
 // Attempts to find and load config options from the file
 // Loads defaults if file/option not found
@@ -35,31 +20,15 @@ void closeConfigFile();
 
 // Reset option(s) to default values
 void resetAllOptions();
-void resetSingleOption(Options option);
+void resetOption(std::string option);
 
-// SGetters
-std::string getPrefPath();
-int setPrefPath(const std::string& path);
+// Gets/sets an option from a key. Callers expected to handle conversion.
+std::string getOption(std::string option);
+void setOption(std::string option, std::string value);
 
-int getLastWinX();
-int setLastWinX(int value);
-int getLastWinY();
-int setLastWinY(int value);
-
-bool isLogToStdout();
-void setLogToStdout(bool value);
-bool isLogToLogFile();
-void setLogToLogFile(bool value);
-
-int getLogLevel();
-void setLogLevel(int value);
-
-// Returns an array of four colors used for the color palette
-// In ascending order from BG to Tile0-Tile3
-std::array<SDL_Color, 5> getColorPalette();
-// Sets the current color palette to an array of SDL_Colors
-// In ascending order from BG to Tile0-Tile3
-// Returns -1 if failed, 0 otherwise
-int setColorPalette(std::array<SDL_Color, 5> palette);
+// Converts a palette of 5 SDL_Colors to a string decodable by stringToPalette()
+std::string paletteToString(std::array<SDL_Color, 5> palette);
+// Converts a string encoded with paletteToString() to a palette of 5 SDL_Colors
+std::array<SDL_Color, 5> stringToPalette(std::string palette);
 
 };

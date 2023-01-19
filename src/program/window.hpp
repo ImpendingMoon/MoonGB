@@ -9,10 +9,13 @@ namespace Window
     void initWindow();
     void closeWindow();
 
+
+    // Wrapper for SDL_RenderPresent()
     void updateWindow();
+    // Draws the background color to the screen
     void clearWindow();
 
-    // Pulls the color palette from the Config
+    // Pulls the color palette from the Config, will display next clear+update
     void refreshColorPalette();
 
 };

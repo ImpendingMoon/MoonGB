@@ -10,7 +10,6 @@
 using namespace Program;
 
 using std::string;
-using fmt::format;
 using Logger::log;
 
 ProgramStates programState = STOPPED;
@@ -24,11 +23,14 @@ void Program::initProgram()
     Config::loadConfigFile();
     Logger::initLogger();
     Window::initWindow();
+    log("PROGRAM: Fully initialized", Logger::VERBOSE);
 }
 
+
+
+// NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
-    // TODO: Set up menus
     programState = MENU;
 
     while(programState != EXITING)
@@ -44,6 +46,8 @@ void Program::beginProgramLoop()
             case SDL_QUIT:
             {
                 programState = EXITING;
+                log("PROGRAM: Exit called.", Logger::VERBOSE);
+                break;
             }
             }
         }
@@ -53,11 +57,9 @@ void Program::beginProgramLoop()
         {
         case MENU:
         {
-            // TODO: Menu handling
         }
         case RUNNING:
         {
-            // TODO: Emulator
         }
         case STOPPED:
         {
@@ -71,12 +73,15 @@ void Program::beginProgramLoop()
         Window::updateWindow();
 
         frameEnd = SDL_GetPerformanceCounter();
-        delta = (frameEnd - frameStart) / (double)SDL_GetPerformanceFrequency();
+        delta = (frameEnd - frameStart) / (double) SDL_GetPerformanceFrequency();
         // Limits FPS to MAX_FRAMERATE
         SDL_Delay( floor((1/MAX_FRAMERATE) - delta) );
     }
+
+    log("PROGRAM: Exited main loop.", Logger::VERBOSE);
 }
 
+// Exits all program subcomponents
 void Program::quitProgram()
 {
     Config::closeConfigFile();
