@@ -6,7 +6,6 @@
 #define PROGRAM "MoonGB"
 
 #include <filesystem>
-#include <sstream>
 #include <algorithm>
 #include "logger.hpp"
 
@@ -164,7 +163,7 @@ string Config::paletteToString(array<SDL_Color, 5> palette)
 // Converts a string encoded with paletteToString() to a palette of 5 SDL_Colors
 array<SDL_Color, 5> Config::stringToPalette(string palette)
 {
-    using std::stringstream;
+    using std::stoi;
 
     array<SDL_Color, 5> output{};
 
@@ -180,13 +179,25 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
     }
 
     // Get values from string
-    char ignore;
-    stringstream str(palette);
     for(size_t i = 0; i < output.size(); i++)
     {
-        // Stringstream junk to ignore formatting
-        str >> ignore >> output[i].r >> ignore >> output[i].g >>
-               output[i].b >> ignore >> output[i].a >> ignore;
+        // Since each color is formatted at the same size, substrings can be
+        // used to get the values for stoi.
+        // I feel like I should have just stored colors in a solid block of ints
+
+        // String offset position. Each color is 18 characters long
+        int offset = i * 18;
+
+        string r,g,b,a;
+        r = palette.substr(offset + 0 + 1, 3);
+        g = palette.substr(offset + 0 + 5, 3);
+        b = palette.substr(offset + 0 + 9, 3);
+        a = palette.substr(offset + 0 + 13, 3);
+
+        output[i].r = stoi(r);
+        output[i].g = stoi(g);
+        output[i].b = stoi(b);
+        output[i].a = stoi(a);
     }
 
     return output;
