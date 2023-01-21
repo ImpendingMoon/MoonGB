@@ -8,11 +8,7 @@
 #include <ctime>
 #include "config.hpp"
 
-using std::string;
-using std::cout;
-using std::cerr;
-using std::ofstream;
-using fmt::format;
+using std::string, std::cout, std::cerr, std::ofstream, fmt::format;
 
 bool initialized = false;
 
@@ -32,8 +28,8 @@ string getTimestamp();
 // Use to initialize logger AFTER config has loaded
 int Logger::initLogger()
 {
-	using std::filesystem::exists;
-	using std::filesystem::create_directories;
+    using std::filesystem::exists;
+    using std::filesystem::create_directories;
     using std::filesystem::filesystem_error;
 
     log_file_path = Config::getOption("PrefPath");
@@ -58,7 +54,7 @@ int Logger::initLogger()
         return -1;
     }
 
-	return 0;
+    return 0;
 }
 
 // Closes the LogFile to properly clear buffers
@@ -74,17 +70,17 @@ void Logger::closeLogger()
 // Puts a message in the console and/or log file.
 void Logger::log(const std::string& message, LogLevel level)
 {
-	if(level <= log_level)
-	{
-		if(log_to_stdout)
-		{
-			cout << getTimestamp() << " " + message + "\n";
-		}
-		if(log_to_logfile)
-		{
+    if(level <= log_level)
+    {
+        if(log_to_stdout)
+        {
+            cout << getTimestamp() << " " + message + "\n";
+        }
+        if(log_to_logfile)
+        {
             LogFile << getTimestamp() << " " + message + "\n";
-		}
-	}
+        }
+    }
 }
 
 

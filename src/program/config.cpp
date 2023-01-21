@@ -9,28 +9,9 @@
 #include <algorithm>
 #include "logger.hpp"
 
-using std::string;
-using std::map;
-using std::array;
-using fmt::format;
+using std::string, std::map, std::array, fmt::format, Logger::log;
 
-using Logger::log;
-
-map<string, string> options{
-    {"PrefPath", "."},
-    {"LogLevel", "3"},
-    {"LogToStdout", "1"},
-    {"LogToLogFile", "1"},
-    {"WinSizeX", "160"},
-    {"WinSizeY", "144"},
-    // Default color palette based off of Gameboy Pocket
-    {"ColorPalette", "{200,211,165,000} " // BG
-                     "{196,207,161,000} " // Tile0
-                     "{139,149,109,000} " // Tile1
-                     "{077,083,060,000} " // Tile2
-                     "{031,031,031,000} " // Tile3
-    },
-};
+map<string, string> options{};
 
 // Defaults
 const map<string, string> DEF_OPTIONS {
@@ -66,6 +47,7 @@ void Config::loadConfigFile()
 
     log("CONFIG: loadConfigFile() not implemented! Loading defaults...",
         Logger::ERROR);
+    resetAllOptions();
 }
 
 int Config::saveConfigFile()
@@ -189,10 +171,11 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
         int offset = i * 18;
 
         string r,g,b,a;
-        r = palette.substr(offset + 0 + 1, 3);
-        g = palette.substr(offset + 0 + 5, 3);
-        b = palette.substr(offset + 0 + 9, 3);
-        a = palette.substr(offset + 0 + 13, 3);
+        // Base offset + Char offset, Length
+        r = palette.substr(offset + 1, 3);
+        g = palette.substr(offset + 5, 3);
+        b = palette.substr(offset + 9, 3);
+        a = palette.substr(offset + 13, 3);
 
         output[i].r = stoi(r);
         output[i].g = stoi(g);

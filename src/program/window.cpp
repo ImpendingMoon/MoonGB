@@ -5,10 +5,7 @@
 #include "logger.hpp"
 #include <SDL2/SDL.h>
 
-using std::string;
-using Logger::log;
-using Config::getOption;
-using fmt::format;
+using std::string, Logger::log, Config::getOption, fmt::format;
 
 static constexpr int GB_X_RES = 160;
 static constexpr int GB_Y_RES = 144;

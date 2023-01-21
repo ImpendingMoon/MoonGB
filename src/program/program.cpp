@@ -9,8 +9,7 @@
 
 using namespace Program;
 
-using std::string;
-using Logger::log;
+using std::string, Logger::log;
 
 ProgramStates programState = STOPPED;
 
