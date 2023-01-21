@@ -33,20 +33,35 @@ target_link_libraries(
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(
-        ${PROJECT_NAME} PUBLIC
-        -Wall
-        -Wpedantic
-        -O3
-    )
+    if(MSVC)
+        target_compile_options(
+            ${PROJECT_NAME} PUBLIC
+            -Ox
+        )
+    else()
+        target_compile_options(
+            ${PROJECT_NAME} PUBLIC
+            -Wall
+            -Wpedantic
+            -O3
+        )
+    endif()
 else()
-    target_compile_options(
-        ${PROJECT_NAME} PUBLIC
-        -Wall
-        -Wpedantic
-        -O0
-        -g
-    )
+    if(MSVC)
+        target_compile_options(
+            ${PROJECT_NAME} PUBLIC
+            -Od
+            -DEBUG
+        )
+    else()
+        target_compile_options(
+            ${PROJECT_NAME} PUBLIC
+            -Wall
+            -Wpedantic
+            -O0
+            -g
+        )
+    endif()
 endif()
 
 target_compile_features(

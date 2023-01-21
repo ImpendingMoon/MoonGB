@@ -4,7 +4,6 @@
 #include "config.hpp"
 #include "logger.hpp"
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 using std::string;
 using Logger::log;

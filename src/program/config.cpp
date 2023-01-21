@@ -90,6 +90,11 @@ int Config::saveConfigFile()
     return -1;
 }
 
+void Config::closeConfigFile()
+{
+
+}
+
 
 // Reset option(s) to default values
 void Config::resetAllOptions()
@@ -106,7 +111,7 @@ void Config::resetOption(string option)
         options.at(option) = DEF_OPTIONS.at(option);
 
     } catch(std::out_of_range& ex) {
-        log(format("CONFIG: Invalid option {:s} passed to resetOption()", option),
+        log(format("CONFIG: Invalid option {:s} passed to resetOption(): {:s}", option, ex.what()),
         Logger::ERROR);
     }
 }
