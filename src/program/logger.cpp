@@ -32,7 +32,11 @@ int Logger::initLogger()
     using std::filesystem::create_directories;
     using std::filesystem::filesystem_error;
 
+    // For some reason stoi tries grabbing param to getOption instead of return
     log_file_path = Config::getOption("PrefPath");
+    log_level = static_cast<LogLevel>(atoi(Config::getOption("LogLevel").c_str()));
+    log_to_stdout = atoi(Config::getOption("LogToStdout").c_str());
+    log_to_logfile = atoi(Config::getOption("LogToLogFile").c_str());
 
     try {
         if(!exists(log_file_path)) { create_directories(log_file_path); }
@@ -45,7 +49,7 @@ int Logger::initLogger()
         return -1;
     }
 
-    log_file_path.append("MoonGB.log");
+    log_file_path.append("/MoonGB.log");
     LogFile.open(log_file_path, std::ios_base::out);
 
     if(!LogFile.is_open())

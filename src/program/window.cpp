@@ -70,18 +70,8 @@ void Window::initWindow()
     SDL_SetWindowMinimumSize(window, GB_X_RES, GB_Y_RES);
 
     // Initial render to screen, window will not show up without it
-    SDL_Color color = color_palette[0];
-    err = SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-
-    if(err != 0)
-    {
-        log(format("WINDOW: Could not set bg draw color in initWindow()! {:s} ",
-                   SDL_GetError()), Logger::ERROR);
-        exit(1);
-    }
-
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    clearWindow();
+    updateWindow();
 
     log("WINDOW: Window successfully created.", Logger::VERBOSE);
 }
@@ -107,9 +97,13 @@ void Window::updateWindow()
 // Wrapper for SDL_RenderPresent()
 void Window::clearWindow()
 {
+    // Black letterboxing
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+    // BG-colored usable screen
     SDL_Color color = color_palette[0];
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderClear(renderer);
+    SDL_RenderFillRect(renderer, NULL);
 }
 
 
