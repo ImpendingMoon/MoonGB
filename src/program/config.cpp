@@ -80,7 +80,7 @@ void Config::closeConfigFile()
 // Reset option(s) to default values
 void Config::resetAllOptions()
 {
-    for(const auto& [key, value] : options)
+    for(const auto& [key, value] : DEF_OPTIONS)
     {
         options[key] = DEF_OPTIONS.at(key);
     }
