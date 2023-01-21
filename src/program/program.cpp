@@ -71,8 +71,13 @@ void Program::beginProgramLoop()
         Window::clearWindow();
         Window::updateWindow();
 
+        // Limit framerate
         frameEnd = SDL_GetPerformanceCounter();
         delta = (frameEnd - frameStart) / (double) SDL_GetPerformanceFrequency();
+        if(delta < 1000/MAX_FRAMERATE)
+        {
+            SDL_Delay((1000 / MAX_FRAMERATE) - delta);
+        }
     }
 
     log("PROGRAM: Exited main loop.", Logger::VERBOSE);
