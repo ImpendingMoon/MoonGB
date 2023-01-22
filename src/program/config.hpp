@@ -20,15 +20,15 @@ void closeConfigFile();
 
 // Reset option(s) to default values
 void resetAllOptions();
-void resetOption(std::string option);
+void resetOption(const std::string& option);
 
 // Gets/sets an option from a key. Callers expected to handle conversion.
-std::string getOption(std::string option);
-void setOption(std::string option, std::string value);
+std::string getOption(const std::string& option);
+void setOption(const std::string& option, const std::string& value);
 
 // Converts a palette of 5 SDL_Colors to a string decodable by stringToPalette()
-std::string paletteToString(std::array<SDL_Color, 5> palette);
+std::string paletteToString(const std::array<SDL_Color, 5>& palette);
 // Converts a string encoded with paletteToString() to a palette of 5 SDL_Colors
-std::array<SDL_Color, 5> stringToPalette(std::string palette);
+std::array<SDL_Color, 5> stringToPalette(const std::string& palette);
 
 };

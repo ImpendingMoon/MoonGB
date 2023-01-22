@@ -86,7 +86,7 @@ void Config::resetAllOptions()
     }
 }
 
-void Config::resetOption(string option)
+void Config::resetOption(const string& option)
 {
     try {
         options.at(option) = DEF_OPTIONS.at(option);
@@ -99,7 +99,7 @@ void Config::resetOption(string option)
 
 
 // Gets/sets an option from a key. Callers expected to handle conversion.
-string Config::getOption(string option)
+string Config::getOption(const string& option)
 {
     try {
         return options.at(option);
@@ -111,7 +111,7 @@ string Config::getOption(string option)
     }
 }
 
-void Config::setOption(string option, string value)
+void Config::setOption(const string& option, const string& value)
 {
     try {
         options.at(option) = value;
@@ -125,7 +125,7 @@ void Config::setOption(string option, string value)
 
 
 // Converts a palette of 5 SDL_Colors to a string decodable by stringToPalette()
-string Config::paletteToString(array<SDL_Color, 5> palette)
+string Config::paletteToString(const array<SDL_Color, 5>& palette)
 {
     string output{};
 
@@ -143,7 +143,7 @@ string Config::paletteToString(array<SDL_Color, 5> palette)
 
 
 // Converts a string encoded with paletteToString() to a palette of 5 SDL_Colors
-array<SDL_Color, 5> Config::stringToPalette(string palette)
+array<SDL_Color, 5> Config::stringToPalette(cosnt string& palette)
 {
     using std::stoi;
 
