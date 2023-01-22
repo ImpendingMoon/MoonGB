@@ -56,9 +56,11 @@ void Program::beginProgramLoop()
         {
         case MENU:
         {
+            break;
         }
         case RUNNING:
         {
+            break;
         }
         case STOPPED:
         {
