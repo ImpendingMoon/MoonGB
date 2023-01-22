@@ -56,20 +56,15 @@ void Program::beginProgramLoop()
         {
         case MENU:
         {
-            break;
         }
         case RUNNING:
         {
-            break;
         }
         case STOPPED:
         {
             programState = MENU;
         }
-        case EXITING:
-        {
-            break;
-        }
+        case EXITING: {}
         }
 
         // Rendering
