@@ -49,7 +49,7 @@ int Logger::initLogger()
         return -1;
     }
 
-    log_file_path.append("/MoonGB.log");
+    log_file_path.append("MoonGB.log");
     LogFile.open(log_file_path, std::ios_base::out);
 
     if(!LogFile.is_open())

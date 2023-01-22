@@ -48,6 +48,7 @@ void Window::initWindow()
                window,
                -1,
                0
+               | SDL_RENDERER_PRESENTVSYNC
                );
 
     if(renderer == NULL)
@@ -94,7 +95,7 @@ void Window::updateWindow()
 
 
 
-// Wrapper for SDL_RenderPresent()
+// Clears the window and draws the background color
 void Window::clearWindow()
 {
     // Black letterboxing

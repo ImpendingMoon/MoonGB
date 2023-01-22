@@ -15,7 +15,7 @@ map<string, string> options{};
 
 // Defaults
 const map<string, string> DEF_OPTIONS {
-    {"PrefPath", "."},
+    {"PrefPath", "./"},
     {"LogLevel", "3"},
     {"LogToStdout", "1"},
     {"LogToLogFile", "1"},
