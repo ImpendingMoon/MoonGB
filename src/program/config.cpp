@@ -74,19 +74,9 @@ void Config::loadConfigFile()
     // Try writing a temp file to the directory, then delete it
     testFile.open(testFilePath);
 
-    if(!testFile.is_open())
-    {
-        std::cout << format("Cannot write to path {:s}! Trying current directory...",
-            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
-
-        resetOption("PrefPath");
-        testFilePath = format("{:s}/temp", options.at("PrefPath"));
-        testFile.open(testFilePath);
-    }
-
     if(!testFile.is_open()) {
-        std::cout << format("Cannot write to path {:s}! Trying user directory...",
-                            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
+        std::cout << format("Cannot write to path {:s}! Trying user directory...\n",
+                            options.at("PrefPath"));
 
         options["PrefPath"] = SDL_GetPrefPath(COMPANY, PROGRAM);
         testFilePath = format("{:s}/temp", options.at("PrefPath"));
@@ -95,8 +85,8 @@ void Config::loadConfigFile()
 
     if(!testFile.is_open())
     {
-        std::cerr << format("Cannot write to path {:s}! Aborting...",
-                            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
+        std::cerr << format("Cannot write to path {:s}! Aborting...\n",
+                            options.at("PrefPath"));
 
     } else {
         testFile.close();
