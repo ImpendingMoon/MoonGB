@@ -6,12 +6,21 @@
 #define PROGRAM "MoonGB"
 
 #include <filesystem>
+#include <fstream>
 #include <algorithm>
+#include <cstdio>
+#include <string>
 #include "logger.hpp"
 
-using std::string, std::map, std::array, fmt::format, Logger::log;
+using std::string, std::map, std::array, std::ifstream, std::ofstream;
+using fmt::format, Logger::log;
 
 map<string, string> options{};
+
+// Loads a properly formatted .ini file into options
+void parseConfigFile(ifstream& ConfFile);
+// Ensures that every key in DEF_OPTIONS also exists inside of options
+void validateOptions();
 
 // Defaults
 const map<string, string> DEF_OPTIONS {
@@ -26,7 +35,7 @@ const map<string, string> DEF_OPTIONS {
                      "{196,207,161,000} " // Tile0
                      "{139,149,109,000} " // Tile1
                      "{077,083,060,000} " // Tile2
-                     "{031,031,031,000} " // Tile3
+                     "{031,031,031,000}" // Tile3
     },
 };
 
@@ -36,45 +45,101 @@ const map<string, string> DEF_OPTIONS {
 // Loads defaults if file/option not found
 void Config::loadConfigFile()
 {
-    /*
-     * PLANNED IMPLEMENTATION:
-     *
-     * 1. Look for MoonGB.ini in '.' and 'SDL_GetPrefPath()'
-     * 2. If not found, log and stop checking. Defaults already initialized.
-     * 3. If found, loop through every line and parse key, value pair,
-     *    using setOption() for error handling
-     */
+    // Load from configuration file
+    ifstream ConfFile;
 
-    log("CONFIG: loadConfigFile() not implemented! Loading defaults...",
-        Logger::ERROR);
-    resetAllOptions();
+    // Try finding MoonGB.ini in current directory
+    ConfFile.open("./MoonGB.ini", std::ios_base::in);
+    // If failed, try finding in SDL_GetPrefPath
+    if(!ConfFile.is_open())
+    {
+        ConfFile.open( format("{:s}MoonGB.ini",
+                       SDL_GetPrefPath(COMPANY, PROGRAM)),
+                       std::ios_base::in);
+    }
+    // If failed, abort and load defaults
+    if(!ConfFile.is_open())
+    {
+        resetAllOptions();
+    }
+
+    // Load .ini into options
+    parseConfigFile(ConfFile);
+
+    ConfFile.close();
+
+    // Check if directory specified in options is writable for log
+    string testFilePath = format("{:s}/temp", options.at("PrefPath"));
+    ofstream testFile;
+    // Try writing a temp file to the directory, then delete it
+    testFile.open(testFilePath);
+
+    if(!testFile.is_open())
+    {
+        std::cout << format("Cannot write to path {:s}! Trying current directory...",
+            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
+
+        resetOption("PrefPath");
+        testFilePath = format("{:s}/temp", options.at("PrefPath"));
+        testFile.open(testFilePath);
+    }
+
+    if(!testFile.is_open()) {
+        std::cout << format("Cannot write to path {:s}! Trying user directory...",
+                            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
+
+        options["PrefPath"] = SDL_GetPrefPath(COMPANY, PROGRAM);
+        testFilePath = format("{:s}/temp", options.at("PrefPath"));
+        testFile.open(testFilePath);
+    }
+
+    if(!testFile.is_open())
+    {
+        std::cerr << format("Cannot write to path {:s}! Aborting...",
+                            options.at("PrefPath"), DEF_OPTIONS.at("PrefPath"));
+
+    } else {
+        testFile.close();
+        std::remove(testFilePath.c_str());
+    }
+
 }
 
 int Config::saveConfigFile()
 {
-    /*
-     * PLANNED IMPLEMENTATION:
-     *
-     * 1. Look to see if MoonGB.ini is already loaded
-     * 2. If not, look for MoonGB.ini in '.' and 'SDL_GetPrefPath()'
-     * 3. If not found, try creating MoonGB.ini in '.'
-     * 4. If failed, try creating MoonGB.ini in 'SDL_GetPrefPath()'
-     * 5. If failed, abort.
-     * 6. Write "[default]" to top line to comply with .ini spec
-     * 7. Iterate through all options, in format:
-     *    "key"="value"
-     s    one pair per line.
-     */
+    ofstream ConfFile;
 
-    log("CONFIG: saveConfigFile() not implemented! Aborting...",
-        Logger::ERROR);
-    return -1;
+    // Try opening MoonGB.ini in current directory
+    ConfFile.open("./MoonGB.ini", std::ios_base::out);
+    // If failed, try finding in SDL_GetPrefPath
+    if(!ConfFile.is_open())
+    {
+        ConfFile.open( format("{:s}/MoonGB.ini",
+                       SDL_GetPrefPath(COMPANY, PROGRAM)),
+                       std::ios_base::out );
+    }
+    // If failed, abort.
+    if(!ConfFile.is_open())
+    {
+        log (format("CONFIG: Could not open {:s}MoonGB.ini to save! Aborting...",
+            SDL_GetPrefPath(COMPANY, PROGRAM)),
+            Logger::ERROR );
+        return -1;
+    }
+
+    // Save all key value pairs to .ini file
+    for(const auto& [key, value] : options)
+    {
+        ConfFile << key << "=" << value << "\n";
+    }
+
+    log("CONFIG: Successfully saved MoonGB.ini!", Logger::VERBOSE);
+
+    ConfFile.close();
+
+    return 0;
 }
 
-void Config::closeConfigFile()
-{
-
-}
 
 
 // Reset option(s) to default values
@@ -96,6 +161,7 @@ void Config::resetOption(string option)
         Logger::ERROR);
     }
 }
+
 
 
 // Gets/sets an option from a key. Callers expected to handle conversion.
@@ -137,6 +203,9 @@ string Config::paletteToString(array<SDL_Color, 5> palette)
         output.append("} ");
     }
 
+    // Trim last whitespace
+    output = output.substr(0, output.length() - 1);
+
     return output;
 }
 
@@ -156,6 +225,7 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
     {
         // Not try/catching because there will always be "ColorPalette" key
         palette = DEF_OPTIONS.at("ColorPalette");
+        options["ColorPalette"] = DEF_OPTIONS.at("ColorPalette");
         log("CONFIG: Malformed color palette given to stringToPalette()."
             "Loading defaults...", Logger::ERROR);
     }
@@ -186,3 +256,69 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
     return output;
 }
 
+
+
+// Loads a properly formatted .ini file into options
+void parseConfigFile(ifstream& ConfFile)
+{
+    using std::getline;
+
+    // Read lines until EOF is reached
+    string line{};
+    while( getline(ConfFile, line) )
+    {
+        // If empty or starting with a comment, skip.
+        if(line.empty()) { continue; }
+        if(line.starts_with(";") || line.starts_with("#")) { continue; }
+
+        // If line has comment, remove section with comment
+        auto index = line.find_first_of(";#");
+        if(index != std::string::npos)
+        {
+            line = line.substr(0, index);
+        }
+
+        // Find '=' for key,pair
+        index = line.find('=');
+        if(index == std::string::npos) { continue; }
+
+        string value = line.substr(index + 1);
+        string key = line.substr(0, index);
+
+
+        // Trim whitespace from key and value
+        size_t keyStartIndex = key.find_first_not_of(" \t");
+        size_t keyEndIndex = key.find_last_not_of(" \t");
+        size_t valueStartIndex = value.find_first_not_of(" \t");
+        size_t valueEndIndex = value.find_last_not_of(" \t");
+
+        if(keyStartIndex != 0 && keyEndIndex != key.length())
+        {
+            key = key.substr(keyStartIndex, keyEndIndex);
+        }
+        if(valueStartIndex != 0 && valueEndIndex != value.length())
+        {
+            value = value.substr(valueStartIndex, valueEndIndex);
+        }
+
+
+        // Only pass into options if a default option exists
+        // Prevents arbitrary data from being loaded into options
+        if(DEF_OPTIONS.count(key))
+        {
+            options[key] = value;
+        }
+    }
+
+    // Ensure that all options, even if not in .ini file, are loaded
+    validateOptions();
+}
+
+// Ensures that every key in DEF_OPTIONS also exists inside of options
+void validateOptions()
+{
+    for(const auto& [key, value] : DEF_OPTIONS)
+    {
+        if(!options.count(key)) { options[key] = value; }
+    }
+}

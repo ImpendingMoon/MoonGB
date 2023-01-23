@@ -88,7 +88,7 @@ void Program::beginProgramLoop()
 // Exits all program subcomponents
 void Program::quitProgram()
 {
-    Config::closeConfigFile();
+    Config::saveConfigFile();
     Logger::closeLogger();
     Window::closeWindow();
 }

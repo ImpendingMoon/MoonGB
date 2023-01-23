@@ -6,6 +6,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <string>
 
 #define FMT_HEADER_ONLY
 #include <fmt/core.h>

@@ -16,8 +16,6 @@ void loadConfigFile();
 // Returns -1 if failed
 int saveConfigFile();
 
-void closeConfigFile();
-
 // Reset option(s) to default values
 void resetAllOptions();
 void resetOption(std::string option);
