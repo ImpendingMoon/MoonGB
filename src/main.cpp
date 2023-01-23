@@ -30,16 +30,9 @@ void checkForRoot()
     auto perms = geteuid();
 
     // Running directly as root
-    if(!user)
+    if(!user || !perms)
     {
-        cerr << "Cannot run as root! Please login to regular user account.\n"
-        exit(1);
-    }
-
-    // Running with sudo
-    if(user != perms && perms == 0)
-    {
-        cerr << "Cannot run under sudo! Please run with regular permissions.\n"
+	std::cerr << "Cannot run as root! Please run as regular user.\n";
         exit(1);
     }
 
