@@ -1,8 +1,18 @@
 #include "main.hpp"
 #include "program/program.hpp"
 
+#ifdef __linux__
+#include <unistd.h>
+#endif
+
+void checkForRoot();
+
 int main(int argc, char* argv[])
 {
+    // If on Linux, make sure program isn't running as root or sudo, since we
+    // place files into (probably) either the /usr/local/bin/ or /home/ folder
+    checkForRoot();
+
     Program::initProgram();
 
     Program::beginProgramLoop();
@@ -11,3 +21,27 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+void checkForRoot()
+{
+#ifdef __linux__
+
+    auto user = getuid();
+    auto perms = geteuid();
+
+    // Running directly as root
+    if(!user)
+    {
+        cerr << "Cannot run as root! Please login to regular user account.\n"
+        exit(1);
+    }
+
+    // Running with sudo
+    if(user != perms && perms == 0)
+    {
+        cerr << "Cannot run under sudo! Please run with regular permissions.\n"
+        exit(1);
+    }
+
+#endif
+    }
