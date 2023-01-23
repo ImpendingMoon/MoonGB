@@ -18,4 +18,7 @@ namespace Window
     // Pulls the color palette from the Config, will display next clear+update
     void refreshColorPalette();
 
+    // Wrapper for SDL_GetWindowSize()
+    void getWindowSize(int* width, int* height);
+
 };

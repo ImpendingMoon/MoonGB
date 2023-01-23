@@ -5,11 +5,11 @@
 #define COMPANY "ImpendingMoon"
 #define PROGRAM "MoonGB"
 
-#include <filesystem>
 #include <fstream>
 #include <algorithm>
 #include <cstdio>
 #include <string>
+#include "window.hpp"
 #include "logger.hpp"
 
 using std::string, std::map, std::array, std::ifstream, std::ofstream;
@@ -28,14 +28,14 @@ const map<string, string> DEF_OPTIONS {
     {"LogLevel", "3"},
     {"LogToStdout", "1"},
     {"LogToLogFile", "1"},
-    {"WinSizeX", "160"},
-    {"WinSizeY", "144"},
+    {"WinSizeX", "640"},
+    {"WinSizeY", "576"},
     // Default color palette based off of Gameboy Pocket
     {"ColorPalette", "{200,211,165,000} " // BG
                      "{196,207,161,000} " // Tile0
                      "{139,149,109,000} " // Tile1
                      "{077,083,060,000} " // Tile2
-                     "{031,031,031,000}" // Tile3
+                     "{031,031,031,000}"  // Tile3
     },
 };
 
@@ -97,6 +97,13 @@ void Config::loadConfigFile()
 
 int Config::saveConfigFile()
 {
+    using std::to_string;
+    // Fetch updates from places that don't automatically update
+    int w, h;
+    Window::getWindowSize(&w, &h);
+    options["WinSizeX"] = to_string(w);
+    options["WinSizeY"] = to_string(h);
+
     ofstream ConfFile;
 
     // Try opening MoonGB.ini in current directory
@@ -111,9 +118,9 @@ int Config::saveConfigFile()
     // If failed, abort.
     if(!ConfFile.is_open())
     {
-        log (format("CONFIG: Could not open {:s}MoonGB.ini to save! Aborting...",
+        log(format("CONFIG: Could not open {:s}MoonGB.ini to save! Aborting...",
             SDL_GetPrefPath(COMPANY, PROGRAM)),
-            Logger::ERROR );
+            Logger::ERROR);
         return -1;
     }
 
@@ -228,7 +235,7 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
         // I feel like I should have just stored colors in a solid block of ints
 
         // String offset position. Each color is 18 characters long
-        int offset = i * 18;
+        int offset = (int)i * 18;
 
         string r,g,b,a;
         // Base offset + Char offset, Length

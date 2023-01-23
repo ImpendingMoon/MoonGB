@@ -117,3 +117,11 @@ void Window::refreshColorPalette()
 
     log("WINDOW: Loaded color palette from config.", Logger::VERBOSE);
 }
+
+
+
+// Wrapper for SDL_GetWindowSize()
+void Window::getWindowSize(int* width, int* height)
+{
+    SDL_GetWindowSize(window, width, height);
+}
