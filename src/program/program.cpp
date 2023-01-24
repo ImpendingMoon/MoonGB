@@ -17,6 +17,10 @@ constexpr double MAX_FRAMERATE = 59.7;
 uint64_t frameStart, frameEnd;
 double delta;
 
+// The most important function (mostly for test purposes);
+void drawShrug();
+
+
 void Program::initProgram()
 {
     Config::loadConfigFile();
@@ -71,6 +75,7 @@ void Program::beginProgramLoop()
 
         // Rendering
         Window::clearWindow();
+        drawShrug();
         Window::updateWindow();
 
         // Limit framerate
@@ -101,4 +106,25 @@ ProgramStates Program::getProgramState()
 void Program::setProgramState(ProgramStates state)
 {
     programState = state;
+}
+
+
+
+int shrugx = 0, shrugy = 0, speedx = 1, speedy = 1;
+void drawShrug()
+{
+    string shrug{};
+    shrug.push_back(127);
+    shrug.append("\\_(");
+    shrug.push_back(126);
+    shrug.append(")_/");
+    shrug.push_back(127);
+
+    shrugx += speedx;
+    shrugy += speedy;
+
+    if(shrugx <= 0 || shrugx >= (160 - 72)) { speedx *= -1; }
+    if(shrugy <= 0 || shrugy >= (144 - 8)) { speedy *= -1; }
+
+    Window::drawString(shrug, shrugx, shrugy);
 }

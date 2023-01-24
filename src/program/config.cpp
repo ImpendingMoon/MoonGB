@@ -130,7 +130,7 @@ int Config::saveConfigFile()
         ConfFile << key << "=" << value << "\n";
     }
 
-    log("CONFIG: Successfully saved MoonGB.ini!", Logger::VERBOSE);
+    log("CONFIG: Successfully saved MoonGB.ini.", Logger::VERBOSE);
 
     ConfFile.close();
 
