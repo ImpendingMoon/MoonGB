@@ -75,7 +75,22 @@ void Program::beginProgramLoop()
 
         // Rendering
         Window::clearWindow();
+        Window::drawString("!\"#$%&\'()*+,-./0", 0, 0);
+        Window::drawString("123456789:;<=>?@", 0, 8+1);
+        Window::drawString("ABCDEFGHIJKLMNOP", 0, 16+2);
+        Window::drawString("QRTSUVWXYZ[\\]^_`", 0, 24+3);
+        Window::drawString("abcdefghijklmnop", 0, 32+4);
+        Window::drawString("qrstuvwxyz{|}~", 0, 40+5);
+
+        Window::drawString("Hello, World!", 0, 61);
+        Window::drawString("Testing text rendering...", 0, 69+1);
+        Window::drawString("C(n, r) = n!/(r!(n-r)!)", 0, 77+2);
+        Window::drawString("'q' has a stray pixel. Why?", 0, 85+3);
+        Window::drawString("The Gameboy can produce", 0, 104);
+        Window::drawString("mind-boggling effects!", 0, 112+1);
+
         drawShrug();
+
         Window::updateWindow();
 
         // Limit framerate
@@ -110,21 +125,19 @@ void Program::setProgramState(ProgramStates state)
 
 
 
-int shrugx = 0, shrugy = 0, speedx = 1, speedy = 1;
+int shrugx = 160/2-20, shrugy = 0, speedx = 1, speedy = 1;
 void drawShrug()
 {
     string shrug{};
-    shrug.push_back(127);
-    shrug.append("\\_(");
+    shrug.append("|\\_(");
     shrug.push_back(126);
-    shrug.append(")_/");
-    shrug.push_back(127);
+    shrug.append(")_/|");
 
     shrugx += speedx;
-    shrugy += speedy;
+//    shrugy += speedy;
+//
+    if(shrugx <= 0 || shrugx >= (160 - 64)) { speedx *= -1; }
+//    if(shrugy <= 0 || shrugy >= (144 - 8)) { speedy *= -1; }
 
-    if(shrugx <= 0 || shrugx >= (160 - 72)) { speedx *= -1; }
-    if(shrugy <= 0 || shrugy >= (144 - 8)) { speedy *= -1; }
-
-    Window::drawString(shrug, shrugx, shrugy);
+    Window::drawString(shrug, shrugx, 144-8-6);
 }

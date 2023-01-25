@@ -69,7 +69,7 @@ void Window::initWindow()
              | SDL_WINDOW_ALLOW_HIGHDPI
              );
 
-    if(window == NULL)
+    if(window == nullptr)
     {
         log(format("WINDOW: Could not create window! {:s}",
                     SDL_GetError()), Logger::ERROR);
@@ -83,7 +83,7 @@ void Window::initWindow()
                | SDL_RENDERER_PRESENTVSYNC
                );
 
-    if(renderer == NULL)
+    if(renderer == nullptr)
     {
         log(format("WINDOW: Could not create renderer! {:s}",
                     SDL_GetError()), Logger::ERROR);
@@ -144,7 +144,7 @@ void Window::clearWindow()
     // BG-colored usable screen
     SDL_Color color = color_palette[BG];
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(renderer, NULL);
+    SDL_RenderFillRect(renderer, nullptr);
 }
 
 
@@ -219,7 +219,8 @@ void Window::drawString(const std::string& message, int x, int y)
         sourceChar.y = (charIndex / 16) * 8;
 
         destChar.x = x + offset;
-        destChar.y = y;
+        // If a valid character, pull y-offset from FontInfo, otherwise 0.
+        destChar.y = (charIndex > 0) ? y + FontInfo.y_offset[charIndex] : y;
 
         SDL_RenderCopy(renderer,
                        charMap,
@@ -227,7 +228,8 @@ void Window::drawString(const std::string& message, int x, int y)
                        &destChar
                        );
 
-        offset += 8;
+        // If a valid character, pull width from FontInfo, otherwise increment by 6.
+        offset += (charIndex > 0) ? FontInfo.width[charIndex] + 1 : 6;
     }
 }
 
