@@ -75,19 +75,19 @@ void Program::beginProgramLoop()
 
         // Rendering
         Window::clearWindow();
-        Window::drawString("!\"#$%&\'()*+,-./0", 0, 0);
-        Window::drawString("123456789:;<=>?@", 0, 8+1);
-        Window::drawString("ABCDEFGHIJKLMNOP", 0, 16+2);
-        Window::drawString("QRTSUVWXYZ[\\]^_`", 0, 24+3);
-        Window::drawString("abcdefghijklmnop", 0, 32+4);
-        Window::drawString("qrstuvwxyz{|}~", 0, 40+5);
+        Window::drawString("!\"#$%&\'()*+,-./0", 1, 0);
+        Window::drawString("123456789:;<=>?@", 1, 8+1);
+        Window::drawString("ABCDEFGHIJKLMNOP", 1, 16+2);
+        Window::drawString("QRTSUVWXYZ[\\]^_`", 1, 24+3);
+        Window::drawString("abcdefghijklmnop", 1, 32+4);
+        Window::drawString("qrstuvwxyz{|}~", 1, 40+5);
 
-        Window::drawString("Hello, World!", 0, 61);
-        Window::drawString("Testing text rendering...", 0, 69+1);
-        Window::drawString("C(n, r) = n!/(r!(n-r)!)", 0, 77+2);
-        Window::drawString("'q' has a stray pixel. Why?", 0, 85+3);
-        Window::drawString("The Gameboy can produce", 0, 104);
-        Window::drawString("mind-boggling effects!", 0, 112+1);
+        Window::drawString("Hello, World!", 1, 61);
+        Window::drawString("Testing text rendering...", 1, 69+1);
+        Window::drawString("C(n, r) = n!/(r!(n-r)!)", 1, 77+2);
+        Window::drawString("Fixed font starting pos.", 1, 85+3);
+        Window::drawString("The Gameboy can produce", 1, 104);
+        Window::drawString("mind-boggling effects!", 1, 112+1);
 
         drawShrug();
 

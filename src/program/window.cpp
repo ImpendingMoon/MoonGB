@@ -215,7 +215,7 @@ void Window::drawString(const std::string& message, int x, int y)
         // Character Map starts with '!' at position 0
         int charIndex = message.at(i) - '!';
         // Get X and Y position from index
-        sourceChar.x = (charIndex % 16) * 8;
+        sourceChar.x = (charIndex % 16) * 8 + 1;
         sourceChar.y = (charIndex / 16) * 8;
 
         destChar.x = x + offset;
