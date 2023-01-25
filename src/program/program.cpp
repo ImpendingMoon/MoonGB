@@ -128,16 +128,11 @@ void Program::setProgramState(ProgramStates state)
 int shrugx = 160/2-20, shrugy = 0, speedx = 1, speedy = 1;
 void drawShrug()
 {
-    string shrug{};
-    shrug.append("|\\_(");
-    shrug.push_back(126);
-    shrug.append(")_/|");
-
     shrugx += speedx;
 //    shrugy += speedy;
 //
     if(shrugx <= 0 || shrugx >= (160 - 64)) { speedx *= -1; }
 //    if(shrugy <= 0 || shrugy >= (144 - 8)) { speedy *= -1; }
 
-    Window::drawString(shrug, shrugx, 144-8-6);
+    Window::drawString("|\\_(~)_/|", shrugx, 144-8-6);
 }
