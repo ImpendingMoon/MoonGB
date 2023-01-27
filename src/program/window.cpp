@@ -155,9 +155,9 @@ void Window::refreshColorPalette()
     using Config::stringToPalette, Config::getOption;
     color_palette = stringToPalette(getOption("ColorPalette"));
 
-    // Text color is always darkest, for simplicity
+    // Label color is always darkest, for simplicity
     SDL_Color color = color_palette[TILE3];
-    if(!charMap) { SDL_SetTextureColorMod(charMap, color.r, color.g, color.b); }
+    SDL_SetTextureColorMod(charMap, color.r, color.g, color.b);
 
     log("WINDOW: Loaded color palette from config.", Logger::VERBOSE);
 }
@@ -215,7 +215,7 @@ void Window::drawString(const std::string& message, int x, int y)
         // Character Map starts with '!' at position 0
         int charIndex = message.at(i) - '!';
         // Get X and Y position from index
-        sourceChar.x = (charIndex % 16) * 8 + 1;
+        sourceChar.x = (charIndex % 16) * 8;
         sourceChar.y = (charIndex / 16) * 8;
 
         destChar.x = x + offset;

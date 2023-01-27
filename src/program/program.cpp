@@ -1,10 +1,11 @@
 // Handles program initialization, loop, and cleanup
 
 #include "program.hpp"
-
 #include "config.hpp"
 #include "logger.hpp"
 #include "window.hpp"
+#include "interface/gui_controller.hpp"
+#include "interface/widgets/gui_text.hpp"
 #include <SDL_events.h>
 
 using namespace Program;
@@ -12,6 +13,8 @@ using namespace Program;
 using std::string, Logger::log;
 
 ProgramStates programState = STOPPED;
+
+GUI::GUIController gui;
 
 constexpr double MAX_FRAMERATE = 59.7;
 uint64_t frameStart, frameEnd;
@@ -34,6 +37,13 @@ void Program::initProgram()
 // NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
+    using std::unique_ptr, std::make_unique, GUI::Label;
+
+    unique_ptr<Label> text = make_unique<Label>();
+    text->setDisplay("Hello, World!");
+    text->setRect({45, 1, 0, 0});
+    gui.addWidget(text);
+
     programState = MENU;
 
     while(programState != EXITING)
@@ -55,11 +65,14 @@ void Program::beginProgramLoop()
             }
         }
 
+        Window::clearWindow();
+
         // Program handling
         switch(programState)
         {
         case MENU:
         {
+            gui.drawWidgets();
             break;
         }
         case RUNNING:
@@ -72,24 +85,6 @@ void Program::beginProgramLoop()
         }
         case EXITING: {}
         }
-
-        // Rendering
-        Window::clearWindow();
-        Window::drawString("!\"#$%&\'()*+,-./0", 1, 0);
-        Window::drawString("123456789:;<=>?@", 1, 8+1);
-        Window::drawString("ABCDEFGHIJKLMNOP", 1, 16+2);
-        Window::drawString("QRTSUVWXYZ[\\]^_`", 1, 24+3);
-        Window::drawString("abcdefghijklmnop", 1, 32+4);
-        Window::drawString("qrstuvwxyz{|}~", 1, 40+5);
-
-        Window::drawString("Hello, World!", 1, 61);
-        Window::drawString("Testing text rendering...", 1, 69+1);
-        Window::drawString("C(n, r) = n!/(r!(n-r)!)", 1, 77+2);
-        Window::drawString("Fixed font starting pos.", 1, 85+3);
-        Window::drawString("The Gameboy can produce", 1, 104);
-        Window::drawString("mind-boggling effects!", 1, 112+1);
-
-        drawShrug();
 
         Window::updateWindow();
 
@@ -121,18 +116,4 @@ ProgramStates Program::getProgramState()
 void Program::setProgramState(ProgramStates state)
 {
     programState = state;
-}
-
-
-
-int shrugx = 160/2-20, shrugy = 0, speedx = 1, speedy = 1;
-void drawShrug()
-{
-    shrugx += speedx;
-//    shrugy += speedy;
-//
-    if(shrugx <= 0 || shrugx >= (160 - 64)) { speedx *= -1; }
-//    if(shrugy <= 0 || shrugy >= (144 - 8)) { speedy *= -1; }
-
-    Window::drawString("|\\_(~)_/|", shrugx, 144-8-6);
 }

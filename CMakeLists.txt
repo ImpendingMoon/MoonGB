@@ -10,6 +10,9 @@ add_executable(
     ./src/program/logger.cpp
     ./src/program/window.cpp
     ./src/program/program.cpp
+    ./src/program/interface/gui_controller.cpp
+    ./src/program/interface/gui_widget.cpp
+    ./src/program/interface/widgets/gui_text.cpp
 )
 
 find_package(
