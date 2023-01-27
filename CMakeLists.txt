@@ -12,7 +12,8 @@ add_executable(
     ./src/program/program.cpp
     ./src/program/interface/gui_controller.cpp
     ./src/program/interface/gui_widget.cpp
-    ./src/program/interface/widgets/gui_text.cpp
+    ./src/program/interface/gui_menu.cpp
+    ./src/program/interface/widgets/gui_label.cpp
 )
 
 find_package(

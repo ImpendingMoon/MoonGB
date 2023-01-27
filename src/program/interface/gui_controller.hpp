@@ -35,7 +35,7 @@ private:
 }
 
 template<typename W>
-long GUI::GUIController::addWidget(W &widget)
+long GUI::GUIController::addWidget(W& widget)
 {
     widget->setID(next_id);
     widgets.push_back(std::move(widget));

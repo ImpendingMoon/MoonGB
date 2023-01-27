@@ -1,4 +1,4 @@
-#include "gui_text.hpp"
+#include "gui_label.hpp"
 
 // Constructor
 GUI::Label::Label()

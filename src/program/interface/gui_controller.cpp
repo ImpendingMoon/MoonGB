@@ -97,11 +97,11 @@ void GUI::GUIController::removeWidget(long id)
 
 
 
-// Returns the index number of a widget with an ID. -1 for none foumd.
+// Returns the index number of a widget with an ID. -1 for none found.
 int GUI::GUIController::getWidgetIndex(long id)
 {
-    int left = 0;
-    int right = widgets.size();
+    size_t left = 0;
+    size_t right = widgets.size();
 
     while(left <= right)
     {

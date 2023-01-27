@@ -5,7 +5,7 @@
 #include "logger.hpp"
 #include "window.hpp"
 #include "interface/gui_controller.hpp"
-#include "interface/widgets/gui_text.hpp"
+#include "interface/widgets/gui_label.hpp"
 #include <SDL_events.h>
 
 using namespace Program;
@@ -37,13 +37,6 @@ void Program::initProgram()
 // NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
-    using std::unique_ptr, std::make_unique, GUI::Label;
-
-    unique_ptr<Label> text = make_unique<Label>();
-    text->setDisplay("Hello, World!");
-    text->setRect({45, 1, 0, 0});
-    gui.addWidget(text);
-
     programState = MENU;
 
     while(programState != EXITING)

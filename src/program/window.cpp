@@ -4,7 +4,6 @@
 #include "config.hpp"
 #include "logger.hpp"
 #include "./graphics/font.hpp"
-#include <SDL2/SDL.h>
 
 using std::string, std::array, std::vector;
 using Logger::log, Config::getOption, fmt::format;
@@ -32,10 +31,10 @@ void Window::initWindow()
     SDL_Surface* fontSurface;
     fontSurface = SDL_CreateRGBSurfaceWithFormatFrom(
                   (void*)&FontData.pixel_data,
-                  FontData.width,
-                  FontData.height,
+                  (int)FontData.width,
+                  (int)FontData.height,
                   8,
-                  (FontData.width * FontData.bytes_per_pixel),
+                  (int)(FontData.width * FontData.bytes_per_pixel),
                   SDL_PIXELFORMAT_RGBA8888
                   );
 
@@ -175,7 +174,7 @@ void Window::getWindowSize(int* width, int* height)
 // Drawing stuff //
 
 // Draws an array of PaletteIDs to the screen
-void Window::drawPImage(PaletteID* data, int x, int y, int width, int height)
+void Window::drawPImage(const PaletteID* data, int x, int y, int width, int height)
 {
     // NOTE: This can and should be optimized. Probably by using a surface.
 
@@ -199,9 +198,90 @@ void Window::drawPImage(PaletteID* data, int x, int y, int width, int height)
                                color_palette[i].b,
                                color_palette[i].a
         );
-        SDL_RenderDrawPoints(renderer, points[i].data(), points[i].size());
+        SDL_RenderDrawPoints(renderer, points[i].data(), (int)points[i].size());
     }
 }
+
+
+
+// Draws a point with a given palette color
+void Window::drawPPoint(const PaletteID& color, int x, int y)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_RenderDrawPoint(renderer, x, y);
+}
+
+
+// Draws a line with a given palette color
+void Window::drawPLine(const PaletteID& color, int x1, int y1, int x2, int y2)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+}
+
+
+// Draws a rect with a given palette color
+void Window::drawPRect(const PaletteID& color, int x1, int y1, int width, int height)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_Rect rect = {x1, y1, width, height};
+    SDL_RenderDrawRect(renderer, &rect);
+}
+
+
+void Window::drawPRect(const PaletteID& color, SDL_Rect* rect)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_RenderDrawRect(renderer, rect);
+}
+
+
+// Draws a filled rect with a given palette color
+void Window::fillPRect(const PaletteID& color, int x1, int y1, int width, int height)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_Rect rect = {x1, y1, width, height};
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+
+void Window::fillPRect(const PaletteID& color, SDL_Rect* rect)
+{
+    SDL_SetRenderDrawColor(renderer,
+                           color_palette[color].r,
+                           color_palette[color].g,
+                           color_palette[color].b,
+                           color_palette[color].a
+    );
+    SDL_RenderFillRect(renderer, rect);
+}
+
+
 
 // Draws a string to the screen using Tile3 of the color palette
 void Window::drawString(const std::string& message, int x, int y)
@@ -210,10 +290,10 @@ void Window::drawString(const std::string& message, int x, int y)
     SDL_Rect destChar = {0, 0, 8, 8};
     int offset = 0; // Offset for next character
 
-    for(size_t i = 0; i < message.length(); i++)
+    for(char i : message)
     {
         // Character Map starts with '!' at position 0
-        int charIndex = message.at(i) - '!';
+        int charIndex = i - '!';
         // Get X and Y position from index
         sourceChar.x = (charIndex % 16) * 8;
         sourceChar.y = (charIndex / 16) * 8;
@@ -226,7 +306,7 @@ void Window::drawString(const std::string& message, int x, int y)
                        charMap,
                        &sourceChar,
                        &destChar
-                       );
+        );
 
         // If a valid character, pull width from FontInfo, otherwise increment by 6.
         offset += (charIndex > 0) ? FontInfo.width[charIndex] + 1 : 6;
