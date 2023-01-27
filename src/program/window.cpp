@@ -171,6 +171,15 @@ void Window::getWindowSize(int* width, int* height)
 
 
 
+// Wrapper for SDL_RenderWindowToLogical()
+void Window::renderWindowToLogical(int windowX, int windowY,
+                           float* logicalX, float* logicalY)
+{
+    SDL_RenderWindowToLogical(renderer, windowX, windowY, logicalX, logicalY);
+}
+
+
+
 // Drawing stuff //
 
 // Draws an array of PaletteIDs to the screen
@@ -244,7 +253,7 @@ void Window::drawPRect(const PaletteID& color, int x1, int y1, int width, int he
 }
 
 
-void Window::drawPRect(const PaletteID& color, SDL_Rect* rect)
+void Window::drawPRect(const PaletteID& color, const SDL_Rect* rect)
 {
     SDL_SetRenderDrawColor(renderer,
                            color_palette[color].r,
@@ -270,7 +279,7 @@ void Window::fillPRect(const PaletteID& color, int x1, int y1, int width, int he
 }
 
 
-void Window::fillPRect(const PaletteID& color, SDL_Rect* rect)
+void Window::fillPRect(const PaletteID& color, const SDL_Rect* rect)
 {
     SDL_SetRenderDrawColor(renderer,
                            color_palette[color].r,

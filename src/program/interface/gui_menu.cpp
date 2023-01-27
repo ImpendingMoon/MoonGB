@@ -11,7 +11,8 @@ void GUI::Menu::loadMenu(GUIController &gui)
 {
     for(auto& widget : widgets)
     {
-        gui.addWidget(widget);
+        long id = gui.addWidget(widget);
+        widget_ids.push_back(id);
     }
     // Data inside of vector is no longer valid due to std::move
     widgets.erase(widgets.begin(), widgets.end());

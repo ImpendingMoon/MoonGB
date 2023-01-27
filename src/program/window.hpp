@@ -29,6 +29,9 @@ namespace Window
 
     // Wrapper for SDL_GetWindowSize()
     void getWindowSize(int* width, int* height);
+    // Wrapper for SDL_RenderWindowToLogical()
+    void renderWindowToLogical(int windowX, int windowY,
+                               float* logicalX, float* logicalY);
 
     // Drawing stuff //
     // Draws an array of PaletteIDs to the screen
@@ -39,10 +42,10 @@ namespace Window
     void drawPLine(const PaletteID& color, int x1, int y1, int x2, int y2);
     // Draws a rect with a given palette color
     void drawPRect(const PaletteID& color, int x1, int y1, int width, int height);
-    void drawPRect(const PaletteID& color, SDL_Rect* rect);
+    void drawPRect(const PaletteID& color, const SDL_Rect* rect);
     // Draws a filled rect with a given palette color
     void fillPRect(const PaletteID& color, int x1, int y1, int width, int height);
-    void fillPRect(const PaletteID& color, SDL_Rect* rect);
+    void fillPRect(const PaletteID& color, const SDL_Rect* rect);
 
     // Draws a string to the screen using Tile3 of the color palette
     void drawString(const std::string& message, int x, int y);

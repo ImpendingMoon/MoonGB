@@ -20,9 +20,13 @@ void GUI::GUIController::sendClick()
 
     SDL_Point mousepos;
     SDL_GetMouseState(&mousepos.x, &mousepos.y);
+    float mouseposfx, mouseposfy;
+    Window::renderWindowToLogical(mousepos.x, mousepos.y, &mouseposfx, &mouseposfy);
+    mousepos.x = (int) mouseposfx;
+    mousepos.y = (int) mouseposfy;
 
     // Iterate backwards so that items rendered on top have priority
-    for(size_t i = widgets.size() - 1; i >= 0; i--)
+    for(int i = widgets.size() - 1; i >= 0; i--)
     {
         auto& widget = widgets.at(i);
         SDL_Rect rect = widget->getRect();
@@ -88,7 +92,7 @@ void GUI::GUIController::removeWidget(long id)
 
     if(index != -1)
     {
-        widgets.erase(widgets.begin() + id);
+        widgets.erase(widgets.begin() + index);
     } else {
         log(format("GUICTRL: Tried removing invalid widget! ID: {:d}", id),
             Logger::ERROR);
@@ -100,17 +104,10 @@ void GUI::GUIController::removeWidget(long id)
 // Returns the index number of a widget with an ID. -1 for none found.
 int GUI::GUIController::getWidgetIndex(long id)
 {
-    size_t left = 0;
-    size_t right = widgets.size();
-
-    while(left <= right)
+    for(size_t i = 0; i < widgets.size(); i++)
     {
-        int middle = left + (right - left) / 2;
-        long widget_id = widgets.at(middle)->getID();
-
-        if(widget_id == id) { return middle; }
-        else if(widget_id < id) { left = middle + 1; }
-        else { right = middle - 1; }
+        long widget_id = widgets.at(i)->getID();
+        if(widget_id == id) { return i; }
     }
 
     return -1;

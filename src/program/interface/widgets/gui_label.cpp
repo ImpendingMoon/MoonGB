@@ -20,14 +20,6 @@ void GUI::Label::draw() const
 }
 
 
-// Handles a mouse click
-void GUI::Label::sendClick() {}
-
-
-// Handles an event
-void GUI::Label::sendEvent(const SDL_Event &event) {}
-
-
 
 std::string GUI::Label::getDisplay()
 {
