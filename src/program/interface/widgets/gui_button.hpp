@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include "../../../core.hpp"
 #include "../gui_widget.hpp"
 
