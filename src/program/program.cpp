@@ -6,6 +6,7 @@
 #include "window.hpp"
 #include "interface/gui_controller.hpp"
 #include "interface/menus/gui_main_menu.hpp"
+#include "interface/menus/gui_motd_menu.hpp"
 #include <SDL_events.h>
 
 using namespace Program;
@@ -40,6 +41,9 @@ void Program::beginProgramLoop()
     std::unique_ptr<GUI::MainMenu> menu = std::make_unique<GUI::MainMenu>();
     menu->initWidgets();
     menu->loadMenu(gui);
+    std::unique_ptr<GUI::MOTD> motd = std::make_unique<GUI::MOTD>();
+    motd->initWidgets();
+    motd->loadMenu(gui);
 
     programState = MENU;
 

@@ -18,6 +18,7 @@ add_executable(
     ./src/program/interface/widgets/gui_box.cpp
     ./src/program/interface/menus/gui_test_menu.cpp
     ./src/program/interface/menus/gui_main_menu.cpp
+    ./src/program/interface/menus/gui_motd_menu.cpp
 )
 
 find_package(
