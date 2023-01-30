@@ -5,7 +5,7 @@
 #include "logger.hpp"
 #include "window.hpp"
 #include "interface/gui_controller.hpp"
-#include "interface/menus/gui_test_menu.hpp"
+#include "interface/menus/gui_main_menu.hpp"
 #include <SDL_events.h>
 
 using namespace Program;
@@ -37,27 +37,15 @@ void Program::initProgram()
 // NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
-    std::unique_ptr<GUI::TestMenu> menu = std::make_unique<GUI::TestMenu>();
+    std::unique_ptr<GUI::MainMenu> menu = std::make_unique<GUI::MainMenu>();
+    menu->initWidgets();
     menu->loadMenu(gui);
-    int frames = 0;
 
     programState = MENU;
 
     while(programState != EXITING)
     {
         frameStart = SDL_GetPerformanceCounter();
-
-        // Test out loading and quitting menus, esp. for memory leaks.
-        if(frames % 150 == 0 && frames != 0)
-        {
-            menu->quitMenu(gui);
-        }
-
-        if(frames % 95 == 0 && frames != 0)
-        {
-            menu->initWidgets();
-            menu->loadMenu(gui);
-        }
 
         // Input processing
         SDL_Event event;
@@ -109,8 +97,6 @@ void Program::beginProgramLoop()
         {
             SDL_Delay((1000 / MAX_FRAMERATE) - delta);
         }
-
-        frames++;
     }
 
     log("PROGRAM: Exited main loop.", Logger::VERBOSE);

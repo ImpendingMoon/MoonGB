@@ -14,17 +14,19 @@ public:
     Menu();
     virtual ~Menu();
 
-    // Stages widgits
+    // Stages widgets
     virtual void initWidgets();
-    // Loads staged widgits into a GUIController
-    virtual void loadMenu(GUIController& gui);
+    // Loads staged widgets into a GUIController
+    void loadMenu(GUIController& gui);
     // Removes all the widgets with IDs in widget_ids from the GUIController
-    virtual void quitMenu(GUIController& gui);
+    void quitMenu(GUIController& gui);
+    // Used for accessing widgets from the GUIController after they've been loaded
+    long getWidgetID(int index);
 
 protected:
     // A list of widget id's that the menu has created
     std::vector<long> widget_ids;
-    // Staged widgits ready to be added to a GUIContainer
+    // Staged widgets ready to be added to a GUIContainer
     std::vector<std::unique_ptr<Widget>> widgets;
 };
 }

@@ -31,7 +31,7 @@ const map<string, string> DEF_OPTIONS {
     {"WinSizeX", "640"},
     {"WinSizeY", "576"},
     // Default color palette based off of Gameboy Pocket
-    {"ColorPalette", "{200,211,165,000} " // BG
+    {"ColorPalette", "{196,207,161,000} " // BG
                      "{196,207,161,000} " // Tile0
                      "{139,149,109,000} " // Tile1
                      "{077,083,060,000} " // Tile2
@@ -69,7 +69,7 @@ void Config::loadConfigFile()
     ConfFile.close();
 
     // Check if directory specified in options is writable for log
-    string testFilePath = format("{:s}/temp", options.at("PrefPath"));
+    string testFilePath = format("{:s}temp", options.at("PrefPath"));
     ofstream testFile;
     // Try writing a temp file to the directory, then delete it
     testFile.open(testFilePath);

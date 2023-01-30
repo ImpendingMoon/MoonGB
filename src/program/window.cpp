@@ -120,7 +120,7 @@ void Window::closeWindow()
 {
     SDL_DestroyTexture(charMap);
     SDL_DestroyWindow(window);
-    // Causes Segfault. Does DestroyWindow also destroy attatched renderers?
+    // Causes Segfault. Does DestroyWindow also destroy attached renderers?
     //SDL_DestroyRenderer(renderer);
 }
 
@@ -298,9 +298,17 @@ void Window::drawString(const std::string& message, int x, int y)
     SDL_Rect sourceChar {0, 0, 8, 8 }; // Rect to copy to screen
     SDL_Rect destChar = {0, 0, 8, 8};
     int offset = 0; // Offset for next character
+    int line = 0;
 
     for(char i : message)
     {
+        // Check for newline
+        if(i == '\n')
+        {
+            line++;
+            offset = -6;
+        }
+
         // Character Map starts with '!' at position 0
         int charIndex = i - '!';
         // Get X and Y position from index
@@ -309,7 +317,7 @@ void Window::drawString(const std::string& message, int x, int y)
 
         destChar.x = x + offset;
         // If a valid character, pull y-offset from FontInfo, otherwise 0.
-        destChar.y = (charIndex > 0) ? y + FontInfo.y_offset[charIndex] : y;
+        destChar.y = (charIndex > 0) ? line * 10 + y + FontInfo.y_offset[charIndex] : y + line * 10;
 
         SDL_RenderCopy(renderer,
                        charMap,
