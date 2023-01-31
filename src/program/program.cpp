@@ -62,12 +62,23 @@ void Program::beginProgramLoop()
                 programState = EXITING;
                 log("PROGRAM: Exit called.", Logger::VERBOSE);
                 break;
-            }
+            } // End Quit
             case SDL_MOUSEBUTTONDOWN:
             {
-                gui.sendClick();
-                break;
-            }
+                if(programState == MENU)
+                {
+                    gui.sendClick();
+                    break;
+                }
+            } // End MouseButtonDown
+            case SDL_KEYDOWN:
+            {
+                if(programState == MENU)
+                {
+                    gui.sendEvent(event);
+                    break;
+                }
+            } // End Keydown
             }
         }
 
