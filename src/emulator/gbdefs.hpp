@@ -8,8 +8,9 @@
 static constexpr uint32_t GB_X_RES = 160;
 static constexpr uint32_t GB_Y_RES = 144;
 
-// Previous implementations used anonymous structs, which was fine in C, but
-// is undefined in C++. Although it usually works, compiler warnings are annoying
+// Previous implementations used anonymous structs to implicitly define combined
+// regs, which was fine in C, but is undefined in C++.
+// Although it usually works, compiler warnings are annoying.
 struct RegisterSet
 {
     uint8_t a;

@@ -44,4 +44,35 @@ namespace Util
         return static_cast<uint16_t>(val);
     }
 
+    // Checks //
+
+    // Returns whether an uint8_t addition will overflow
+    inline bool checkOFAdd(uint8_t a, uint8_t b)
+    {
+        return a > (UINT8_MAX - b);
+    }
+
+    // Returns whether an uint16_t addition will overflow
+    inline bool checkOFAdd(uint16_t a, uint16_t b)
+    {
+        return a > (UINT16_MAX - b);
+    }
+
+    // Returns whether an uint8_t addition will half-carry (lower nibble to upper nibble)
+    inline bool checkHCAdd(uint16_t a, uint16_t b)
+    {
+        return ((a & 0xF) + (b & 0xF)) > 0xF;
+    }
+
+    // Returns whether an uint8_t subtraction (a - b) will underflow
+    inline bool checkUFSub(uint8_t a, uint8_t b)
+    {
+        return (a < b);
+    }
+
+    // Returns whether an uint16_t subtraction (a - b) will underflow
+    inline bool checkUFSub(uint16_t a, uint16_t b)
+    {
+        return (a < b);
+    }
 }

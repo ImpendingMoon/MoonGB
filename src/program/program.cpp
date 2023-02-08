@@ -21,9 +21,6 @@ constexpr double MAX_FRAMERATE = 59.7;
 uint64_t frameStart, frameEnd;
 double delta;
 
-// The most important function (mostly for test purposes);
-void drawShrug();
-
 
 void Program::initProgram()
 {
