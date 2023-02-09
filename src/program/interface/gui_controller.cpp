@@ -60,11 +60,6 @@ void GUI::GUIController::sendEvent(SDL_Event event)
     if(index != -1)
     {
         widgets.at(index)->sendEvent(event);
-    } else {
-        log(format("GUICTRL: Tried sending event to invalid widget! ID: {:d}",
-            focused_widget),
-            Logger::logERROR);
-            focused_widget = -1;
     }
 }
 

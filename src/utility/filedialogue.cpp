@@ -24,7 +24,7 @@ string openFileDialogue(const string& start_path, const vector<string>& extentio
     // of "" as an empty vector to handle this.
     bool extensions_empty = extentions.empty() || (extentions.size() == 1 && extentions[0] == "");
 
-    string path = "";
+    string path{};
     // Check for default values in start_path
     if(start_path.empty())
     {
@@ -52,16 +52,15 @@ string openFileDialogue(const string& start_path, const vector<string>& extentio
     {
         filter_string += "All Files (*.*)\0*.*\0"; // clang-tidy hates this
     } else {
-        for(auto i = 0; i < extentions.size(); i++)
+        for(size_t i = 0; i < extentions.size(); i++)
         {
-            filter_string += extentions[i] + " Files (*." + extentions[i];
-            filter_string += ")\0*." + extentions[i] + "\0";
+            filter_string += extentions[i] + " files (*." + extentions[i] + ") ";
         }
     }
 
     // Copy the filter string to a TCHAR buffer
     size_t len = filter_string.length();
-    for(auto i = 0; i <= len; i++)
+    for(size_t i = 0; i <= len; i++)
     {
         szFilter[i] = filter_string[i];
     }

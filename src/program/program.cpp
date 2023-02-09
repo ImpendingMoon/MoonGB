@@ -5,8 +5,7 @@
 #include "logger.hpp"
 #include "window.hpp"
 #include "interface/gui_controller.hpp"
-#include "interface/menus/gui_main_menu.hpp"
-#include "interface/menus/gui_motd_menu.hpp"
+#include "interface/gui_menu_controller.hpp"
 #include "../utility/filedialogue.hpp"
 #include <SDL_events.h>
 
@@ -36,23 +35,9 @@ void Program::initProgram()
 // NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
-    // TODO: Move menu handling to a separate file
-    std::unique_ptr<GUI::MainMenu> menu = std::make_unique<GUI::MainMenu>();
-    menu->initWidgets();
-    menu->loadMenu(gui);
-    std::unique_ptr<GUI::MOTD> motd = std::make_unique<GUI::MOTD>();
-    motd->initWidgets();
-    motd->loadMenu(gui);
+    GUI::MenuController::initMenus(gui);
 
     programState = MENU;
-
-    // Test open file dialogue
-    string myFilePath = "";
-    while(myFilePath.empty())
-    {
-        myFilePath = openFileDialogue();
-    }
-    log(myFilePath, Logger::logVERBOSE);
 
     while(programState != EXITING)
     {
@@ -124,18 +109,41 @@ void Program::beginProgramLoop()
     log("PROGRAM: Exited main loop.", Logger::logVERBOSE);
 }
 
+
+
 // Exits all program subcomponents
 void Program::quitProgram()
 {
     Config::saveConfigFile();
     Logger::closeLogger();
     Window::closeWindow();
+    GUI::MenuController::quitMenus();
 }
+
+
+
+// If the emulator is not running, prompts for a ROM file to start an emu,
+// or just switches focus back to the existing emulator
+void Program::startEmulator()
+{
+    // To be added when Emulator is added
+    openFileDialogue("", {"gb", "gbc"});
+}
+
+
+// Closes the emulator if running and switches back to the menu.
+void Program::quitEmulator()
+{
+    // To be added when Emulator is added
+}
+
 
 ProgramStates Program::getProgramState()
 {
     return programState;
 }
+
+
 
 void Program::setProgramState(ProgramStates state)
 {

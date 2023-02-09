@@ -18,25 +18,28 @@ void GUI::MainMenu::initWidgets()
     label->setRect({8, 8, 0, 0});
     widgets.push_back(move(label));
 
-    label = make_unique<Label>();
-    label->setDisplay("Now Playing:");
-    label->setRect({8, 121, 0, 0});
-    widgets.push_back(move(label));
-
-    label = make_unique<Label>();
-    label->setDisplay("|\\_(~)_/|");
-    label->setRect({8, 132, 0, 0});
-    widgets.push_back(move(label));
+    // TODO: Place in separate menu
+//    label = make_unique<Label>();
+//    label->setDisplay("Now Playing:");
+//    label->setRect({8, 121, 0, 0});
+//    widgets.push_back(move(label));
+//
+//    label = make_unique<Label>();
+//    label->setDisplay("|\\_(~)_/|");
+//    label->setRect({8, 132, 0, 0});
+//    widgets.push_back(move(label));
 
     // Buttons
     unique_ptr<Button> button = make_unique<Button>();
     button->setDisplay("Play");
     button->setRect({8, 33, 40, 12});
+    button->setOnClick([](){ Program::startEmulator(); });
     widgets.push_back(move(button));
 
     button = make_unique<Button>();
     button->setDisplay("Stop");
     button->setRect({8, 55, 40, 12});
+    button->setOnClick([](){ Program::quitEmulator(); });
     widgets.push_back(move(button));
 
     button = make_unique<Button>();
