@@ -120,7 +120,7 @@ int Config::saveConfigFile()
     {
         log(format("CONFIG: Could not open {:s}MoonGB.ini to save! Aborting...",
             SDL_GetPrefPath(COMPANY, PROGRAM)),
-            Logger::ERROR);
+            Logger::logERROR);
         return -1;
     }
 
@@ -130,7 +130,7 @@ int Config::saveConfigFile()
         ConfFile << key << "=" << value << "\n";
     }
 
-    log("CONFIG: Successfully saved MoonGB.ini.", Logger::VERBOSE);
+    log("CONFIG: Successfully saved MoonGB.ini.", Logger::logVERBOSE);
 
     ConfFile.close();
 
@@ -155,7 +155,7 @@ void Config::resetOption(string option)
 
     } catch(std::out_of_range& ex) {
         log(format("CONFIG: Invalid option {:s} passed to resetOption(): {:s}", option, ex.what()),
-        Logger::ERROR);
+        Logger::logERROR);
     }
 }
 
@@ -169,7 +169,7 @@ string Config::getOption(string option)
 
     } catch(std::out_of_range& ex) {
         log(format("CONFIG: Invalid option {:s} passed to getOption()", option),
-            Logger::ERROR);
+            Logger::logERROR);
         return "";
     }
 }
@@ -181,7 +181,7 @@ void Config::setOption(string option, string value)
 
     } catch(std::out_of_range& ex) {
         log(format("CONFIG: Invalid option {:s} passed to getOption()", option),
-            Logger::ERROR);
+            Logger::logERROR);
     }
 }
 
@@ -224,7 +224,7 @@ array<SDL_Color, 5> Config::stringToPalette(string palette)
         palette = DEF_OPTIONS.at("ColorPalette");
         options["ColorPalette"] = DEF_OPTIONS.at("ColorPalette");
         log("CONFIG: Malformed color palette given to stringToPalette()."
-            "Loading defaults...", Logger::ERROR);
+            "Loading defaults...", Logger::logERROR);
     }
 
     // Get values from string

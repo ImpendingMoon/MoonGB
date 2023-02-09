@@ -18,8 +18,11 @@ At the moment, I'm primarily focusing on getting a somewhat decent user experien
 6) Implement Gameboy Color compatibility
 
 ## Dependencies:
+#### All Platforms
 1) SDL2 - Version 2.26 or higher
 2) {fmt} - Version 9.0.0 or higher
+#### Linux Only
+3) GTK3 - Version 3.24 or higher
 
 ## Building:
 1) Clone repo into a new folder

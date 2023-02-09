@@ -46,7 +46,7 @@ void Window::initWindow()
         winHeight = stoi(getOption("WinSizeY"));
 
     } catch(std::invalid_argument& ex) {
-        log("WINDOW: Couldn't load window size! Loading defaults...", Logger::ERROR);
+        log("WINDOW: Couldn't load window size! Loading defaults...", Logger::logERROR);
         Config::resetOption("WinSizeX");
         Config::resetOption("WinSizeY");
         winWidth = stoi(getOption("WinSizeX"));
@@ -71,7 +71,7 @@ void Window::initWindow()
     if(window == nullptr)
     {
         log(format("WINDOW: Could not create window! {:s}",
-                    SDL_GetError()), Logger::ERROR);
+                    SDL_GetError()), Logger::logERROR);
         exit(1);
     }
 
@@ -85,7 +85,7 @@ void Window::initWindow()
     if(renderer == nullptr)
     {
         log(format("WINDOW: Could not create renderer! {:s}",
-                    SDL_GetError()), Logger::ERROR);
+                    SDL_GetError()), Logger::logERROR);
         exit(1);
     }
 
@@ -96,7 +96,7 @@ void Window::initWindow()
     if(err != 0)
     {
         log(format("WINDOW: Could not set logical size! {:s}",
-                    SDL_GetError()), Logger::ERROR);
+                    SDL_GetError()), Logger::logERROR);
         exit(1);
     }
 
@@ -112,7 +112,7 @@ void Window::initWindow()
     clearWindow();
     updateWindow();
 
-    log("WINDOW: Successfully created window.", Logger::VERBOSE);
+    log("WINDOW: Successfully created window.", Logger::logVERBOSE);
 }
 
 
@@ -158,7 +158,7 @@ void Window::refreshColorPalette()
     SDL_Color color = color_palette[TILE3];
     SDL_SetTextureColorMod(charMap, color.r, color.g, color.b);
 
-    log("WINDOW: Loaded color palette from config.", Logger::VERBOSE);
+    log("WINDOW: Loaded color palette from config.", Logger::logVERBOSE);
 }
 
 

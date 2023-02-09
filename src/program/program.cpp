@@ -7,6 +7,7 @@
 #include "interface/gui_controller.hpp"
 #include "interface/menus/gui_main_menu.hpp"
 #include "interface/menus/gui_motd_menu.hpp"
+#include "../utility/filedialogue.hpp"
 #include <SDL_events.h>
 
 using namespace Program;
@@ -27,7 +28,7 @@ void Program::initProgram()
     Config::loadConfigFile();
     Logger::initLogger();
     Window::initWindow();
-    log("PROGRAM: Fully initialized", Logger::VERBOSE);
+    log("PROGRAM: Fully initialized", Logger::logVERBOSE);
 }
 
 
@@ -35,6 +36,7 @@ void Program::initProgram()
 // NOTE: The program loop is run on the same thread function is called in
 void Program::beginProgramLoop()
 {
+    // TODO: Move menu handling to a separate file
     std::unique_ptr<GUI::MainMenu> menu = std::make_unique<GUI::MainMenu>();
     menu->initWidgets();
     menu->loadMenu(gui);
@@ -43,6 +45,14 @@ void Program::beginProgramLoop()
     motd->loadMenu(gui);
 
     programState = MENU;
+
+    // Test open file dialogue
+    string myFilePath = "";
+    while(myFilePath.empty())
+    {
+        myFilePath = openFileDialogue();
+    }
+    log(myFilePath, Logger::logVERBOSE);
 
     while(programState != EXITING)
     {
@@ -57,7 +67,7 @@ void Program::beginProgramLoop()
             case SDL_QUIT:
             {
                 programState = EXITING;
-                log("PROGRAM: Exit called.", Logger::VERBOSE);
+                log("PROGRAM: Exit called.", Logger::logVERBOSE);
                 break;
             } // End Quit
             case SDL_MOUSEBUTTONDOWN:
@@ -111,7 +121,7 @@ void Program::beginProgramLoop()
         }
     }
 
-    log("PROGRAM: Exited main loop.", Logger::VERBOSE);
+    log("PROGRAM: Exited main loop.", Logger::logVERBOSE);
 }
 
 // Exits all program subcomponents

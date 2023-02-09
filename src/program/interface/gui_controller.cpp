@@ -63,7 +63,7 @@ void GUI::GUIController::sendEvent(SDL_Event event)
     } else {
         log(format("GUICTRL: Tried sending event to invalid widget! ID: {:d}",
             focused_widget),
-            Logger::ERROR);
+            Logger::logERROR);
             focused_widget = -1;
     }
 }
@@ -95,7 +95,7 @@ void GUI::GUIController::removeWidget(long id)
         widgets.erase(widgets.begin() + index);
     } else {
         log(format("GUICTRL: Tried removing invalid widget! ID: {:d}", id),
-            Logger::ERROR);
+            Logger::logERROR);
     }
 }
 

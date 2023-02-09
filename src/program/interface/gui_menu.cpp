@@ -38,7 +38,7 @@ long GUI::Menu::getWidgetID(int index)
         id = widget_ids.at(index);
     } catch(std::out_of_range&) {
         log(format("MENU: Tried getting ID of invalid widget: {:d}.",
-        index), Logger::ERROR);
+        index), Logger::logERROR);
         return -1;
     }
 

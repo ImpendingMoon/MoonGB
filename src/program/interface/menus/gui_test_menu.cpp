@@ -11,17 +11,17 @@ GUI::TestMenu::~TestMenu() {}
 
 void testButton1()
 {
-    log("Pressed Button 1", Logger::VERBOSE);
+    log("Pressed Button 1", Logger::logVERBOSE);
 }
 
 void testButton2()
 {
-    log("Pressed Button 2", Logger::VERBOSE);
+    log("Pressed Button 2", Logger::logVERBOSE);
 }
 
 void testButton3()
 {
-    log("Pressed Button 3", Logger::VERBOSE);
+    log("Pressed Button 3", Logger::logVERBOSE);
 }
 
 void GUI::TestMenu::initWidgets() {

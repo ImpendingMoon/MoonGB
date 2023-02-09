@@ -11,3 +11,12 @@
 
 #define FMT_HEADER_ONLY
 #include <fmt/core.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <commdlg.h> // great names, microsoft
+#include <tchar.h>
+
+#elif __linux__
+#include <gtk/gtk.h>
+#endif

@@ -8,7 +8,7 @@ using std::unique_ptr, std::make_unique, std::move, GUI::Label;
 const vector<string> messages = {
         "Fun Fact:\nThe Gameboy\nsold 118.69\nunits! Nice.",
         "Fun Fact:\nThe Gameboy \nruns at 59.7\nFPS!",
-        "Fun Fact:\nThe Gameboy's\nCPU is called\nthe Sharp\nLR35902, and\nis a clone of\nthe Zylog Z80.",
+        "Fun Fact:\nThe Gameboy's\nCPU is called\nthe Sharp\nLR35902, and\nis based on the\n8080 and Z80.",
         "Fun Fact:\nThe Gameboy\nlaunched on\nApril 21 1989,\nand sold out on\nthe same day!",
         "Fun Fact:\nI can't be\nbothered to\nwrite more of\nthese right\nnow!",
         };

@@ -12,11 +12,11 @@ namespace Logger
 // Will only log up to the level specified in config
 enum LogLevel
 {
-    NOTHING, // Will not be logged/will log nothing
-    ERROR,   // Log program errors
-    VERBOSE, // Log program information
-    DEBUG,   // Log emulation errors
-    EXTREME, // Log emulation info (SLOW AND BIG!) (like multiple GB log files)
+    logNOTHING, // Will not be logged/will log nothing
+    logERROR,   // Log program errors
+    logVERBOSE, // Log program information
+    logDEBUG,   // Log emulation errors
+    logEXTREME, // Log emulation info (SLOW AND BIG!) (like multiple GB log files)
 };
 
 // Use to initialize logger AFTER config has loaded

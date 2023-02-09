@@ -6,6 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(
     ${PROJECT_NAME}
     ./src/main.cpp
+    ./src/utility/filedialogue.cpp
     ./src/program/config.cpp
     ./src/program/logger.cpp
     ./src/program/window.cpp
