@@ -306,7 +306,7 @@ void Window::drawString(const std::string& message, int x, int y)
         if(i == '\n')
         {
             line++;
-            offset = -6;
+            offset = -4;
         }
 
         // Character Map starts with '!' at position 0
@@ -325,8 +325,8 @@ void Window::drawString(const std::string& message, int x, int y)
                        &destChar
         );
 
-        // If a valid character, pull width from FontInfo, otherwise increment by 6.
-        offset += (charIndex > 0) ? FontInfo.width[charIndex] + 1 : 6;
+        // If a valid character, pull width from FontInfo, otherwise increment by 4.
+        offset += (charIndex > 0) ? FontInfo.width[charIndex] + 1 : 4;
     }
 }
 
