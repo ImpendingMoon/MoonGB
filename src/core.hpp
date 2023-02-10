@@ -7,6 +7,7 @@
 #include <array>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <map>
 
 #define FMT_HEADER_ONLY
@@ -14,8 +15,9 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#include <commdlg.h> // great names, microsoft
+#include <shobjidl.h>
 #include <tchar.h>
+#include <codecvt>
 
 #elif __linux__
 #include <gtk/gtk.h>

@@ -8,4 +8,6 @@ std::string openFileDialogue();
 // Opens a choose-dialogue with a specific directory
 std::string openFileDialogue(const std::string& start_path);
 // Opens a choose-file dialogue with a specific directory and extension(s)
-std::string openFileDialogue(const std::string& start_path, const std::vector<std::string>& extentions);
+std::string openFileDialogue(const std::string& start_path,
+                             const std::string& filter_name,
+                             const std::vector<std::string>& extentions);

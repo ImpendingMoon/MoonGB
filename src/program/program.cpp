@@ -127,7 +127,9 @@ void Program::quitProgram()
 void Program::startEmulator()
 {
     // To be added when Emulator is added
-    openFileDialogue("", {"gb", "gbc"});
+    string path = openFileDialogue("", "Gameboy ROM", {"GB", "GBC"});
+
+    if(!path.empty()) { log("PROGRAM: Opened file " + path, Logger::logVERBOSE); }
 }
 
 
