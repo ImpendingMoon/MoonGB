@@ -33,6 +33,7 @@ enum TargetID
     AF, BC, DE, HL,
     SP, PC,
     IMMEDIATE,
+    BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7
 };
 
 // Human-readable representation of the F register
@@ -110,6 +111,13 @@ enum BankController
     // Probably not emulating GB Camera
 };
 
+// The Gameboy's memory is split among several banks
+struct MemoryBank
+{
+    std::vector<uint8_t> data;
+    bool is_locked;
+};
+
 // Used for logging.
 struct Instruction
 {
@@ -123,110 +131,108 @@ struct Instruction
     bool two_byte;
 };
 
-// toString stuff
-std::string toString(TargetID target)
+// targetToString stuff
+inline std::string targetToString(TargetID target)
 {
-    std::string output = "";
     switch(target)
     {
-        case NOTARGET: output = "NOTARGET"; break;
-        case A: output = "A"; break;
-        case F: output = "F"; break;
-        case B: output = "B"; break;
-        case C: output = "C"; break;
-        case D: output = "D"; break;
-        case E: output = "E"; break;
-        case H: output = "H"; break;
-        case L: output = "L"; break;
-        case AF: output = "AF"; break;
-        case BC: output = "BC"; break;
-        case DE: output = "DE"; break;
-        case HL: output = "HL"; break;
-        case SP: output = "SP"; break;
-        case PC: output = "PC"; break;
-        case IMMEDIATE: output = "IMMEDIATE"; break;
+        case NOTARGET: return "NOTARGET";
+        case A: return "A";
+        case F: return "F";
+        case B: return "B";
+        case C: return "C";
+        case D: return "D";
+        case E: return "E";
+        case H: return "H";
+        case L: return "L";
+        case AF: return "AF";
+        case BC: return "BC";
+        case DE: return "DE";
+        case HL: return "HL";
+        case SP: return "SP";
+        case PC: return "PC";
+        case BIT0: return "0";
+        case BIT1: return "1";
+        case BIT2: return "2";
+        case BIT3: return "3";
+        case BIT4: return "4";
+        case BIT5: return "5";
+        case BIT6: return "6";
+        case BIT7: return "7";
+        case IMMEDIATE: return "IMMEDIATE";
     }
-    return output;
+    return "ERROR";
 }
 
-std::string toString(BankController mbc)
+inline std::string mbcToString(BankController mbc)
 {
-    std::string output = "";
     switch(mbc)
     {
-        case NONE: output = "NONE"; break;
-        case NONE_RAM: output = "NONE_RAM"; break;
-        case NONE_BAT_RAM: output = "NONE_BAT_RAM"; break;
-        case MBC1: output = "MBC1"; break;
-        case MBC1_RAM: output = "MBC1_RAM"; break;
-        case MBC1_BAT_RAM: output = "MBC1_BAT_RAM"; break;
-        case MBC2: output = "MBC2"; break;
-        case MBC2_BAT: output = "MBC2_BAT"; break;
-        case MBC3: output = "MBC3"; break;
-        case MBC3_RAM: output = "MBC3_RAM"; break;
-        case MBC3_BAT_RAM: output = "MBC3_BAT_RAM"; break;
-        case MBC3_BAT_TIMER: output = "MBC3_BAT_TIMER"; break;
-        case MBC3_BAT_RAM_TIMER: output = "MBC3_BAT_RAM_TIMER"; break;
-        case MBC5: output = "MBC5"; break;
-        case MBC5_RAM: output = "MBC5_RAM"; break;
-        case MBC5_BAT_RAM: output = "MBC5_BAT_RAM"; break;
-        case MBC5_RUMBLE: output = "MBC5_RUMBLE"; break;
-        case MBC5_RUMBLE_RAM: output = "MBC5_RUMBLE_RAM"; break;
-        case MBC5_RUMBLE_BAT_RAM: output = "MBC5_RUMBLE_BAT_RAM"; break;
-        case MBC6: output = "MBC6"; break;
-        case HuC1: output = "HuC1"; break;
-        case HuC3: output = "HuC3"; break;
+        case NONE: return "NONE";
+        case NONE_RAM: return "NONE_RAM";
+        case NONE_BAT_RAM: return "NONE_BAT_RAM";
+        case MBC1: return "MBC1";
+        case MBC1_RAM: return "MBC1_RAM";
+        case MBC1_BAT_RAM: return "MBC1_BAT_RAM";
+        case MBC2: return "MBC2";
+        case MBC2_BAT: return "MBC2_BAT";
+        case MBC3: return "MBC3";
+        case MBC3_RAM: return "MBC3_RAM";
+        case MBC3_BAT_RAM: return "MBC3_BAT_RAM";
+        case MBC3_BAT_TIMER: return "MBC3_BAT_TIMER";
+        case MBC3_BAT_RAM_TIMER: return "MBC3_BAT_RAM_TIMER";
+        case MBC5: return "MBC5";
+        case MBC5_RAM: return "MBC5_RAM";
+        case MBC5_BAT_RAM: return "MBC5_BAT_RAM";
+        case MBC5_RUMBLE: return "MBC5_RUMBLE";
+        case MBC5_RUMBLE_RAM: return "MBC5_RUMBLE_RAM";
+        case MBC5_RUMBLE_BAT_RAM: return "MBC5_RUMBLE_BAT_RAM";
+        case MBC6: return "MBC6";
+        case HuC1: return "HuC1";
+        case HuC3: return "HuC3";
     }
-    return output;
+    return "ERROR";
 }
 
-std::string toString(Instruction ins)
+inline std::string insToString(Instruction inst)
 {
-    // String formatting my beloved...
-    std::string output = "";
-    std::string t1str = "", t2str = "";
+    using std::string, fmt::format;
 
-    output.append("(");
-    if(ins.target1 == NOTARGET) { t1str = ""; }
-    else if(ins.target1 == IMMEDIATE) { t1str = "n"; }
-    else { t1str = toString(ins.target1); }
-
-    if(ins.target2 == NOTARGET) { t2str = ""; }
-    else if(ins.target2 == IMMEDIATE) { t2str = "n"; }
-    else { t2str = toString(ins.target2); }
-
-    output.append(fmt::format("INS: {:s} ", ins.mnemonic));
-
-    if(ins.t1_as_address)
+    string t1;
+    if(inst.target1 == IMMEDIATE)
     {
-        output.append(fmt::format("({:s})", t1str));
+        t1 = "n";
     } else {
-        output.append(fmt::format("{:s}", t1str));
+        if(inst.t1_as_address)
+        {
+            t1 = format("[{}]", targetToString(inst.target1));
+        } else {
+            t1 = targetToString(inst.target1);
+        }
     }
 
-    if(ins.t2_as_address)
+    string t2;
+    if(inst.target2 != NOTARGET)
     {
-        output.append(fmt::format("({:s})", t2str));
-    } else {
-        output.append(fmt::format("{:s}", t2str));
+        if(inst.target2 == IMMEDIATE)
+        {
+            t2 = "n";
+        } else {
+            if(inst.t2_as_address)
+            {
+                t2 = format("[{}]", targetToString(inst.target2));
+            } else {
+                t2 = targetToString(inst.target2);
+            }
+        }
     }
 
-    output.append(" | ");
-
-    output.append(fmt::format("Origin Address: ${:04X} | ", ins.origin));
-
-    if(ins.two_byte)
-    {
-        output.append(fmt::format("Opcode: 0x{:04X}", ins.opcode));
-    } else {
-        output.append(fmt::format("Opcode: 0x{:02X}", ins.opcode));
-    }
-    output.append(")");
-
-    return output;
+    // Format in Intel-like assembly syntax
+    return format("{} {} {} | Origin ${:04X} | Opcode 0x{:02X}",
+                  inst.mnemonic, t1, t2, inst.origin, inst.opcode);
 }
 
-std::string toString(RegisterSet regs)
+inline std::string regsToString(RegisterSet regs)
 {
     std::string output = "";
     output.append("(");

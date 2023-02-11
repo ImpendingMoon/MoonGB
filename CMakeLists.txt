@@ -7,6 +7,11 @@ add_executable(
     ${PROJECT_NAME}
     ./src/main.cpp
     ./src/utility/filedialogue.cpp
+    ./src/emulator/gameboy.cpp
+    ./src/emulator/cpu.cpp
+    ./src/emulator/memory.cpp
+    ./src/emulator/cartridge.cpp
+    ./src/emulator/ppu.cpp
     ./src/program/config.cpp
     ./src/program/logger.cpp
     ./src/program/window.cpp
