@@ -6,7 +6,7 @@ This may or may not be my fourth attempt at writing a Gameboy emulator, but shh.
 
 MoonGB is mostly being made as a way to learn C++, SDL, and system architecture. I also want an excuse to play Pokemon, because just downloading an emulator was "too easy".
 
-At the moment, I'm primarily focusing on getting a somewhat decent user experience with SDL before jumping into the main emulator again, as that's what I need the most practice in.
+Now that I have (most of) a GUI down, I'm working on the actual emulator. Currently the emulator can load a ROM into Memory, and that's about it. I'm currently working on the emulated CPU, before working on Timers, Input, and the PPU.
 
 ## Project Goals:
 
