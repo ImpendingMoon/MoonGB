@@ -9,6 +9,8 @@
 #include "../utility/filedialogue.hpp"
 #include <SDL_events.h>
 
+#define VERSION "0.1.0"
+
 using namespace Program;
 
 using std::string, Logger::log;
@@ -26,6 +28,7 @@ void Program::initProgram()
 {
     Config::loadConfigFile();
     Logger::initLogger();
+    log("Starting MoonGB v" VERSION, Logger::logVERBOSE);
     Window::initWindow();
     log("PROGRAM: Fully initialized", Logger::logVERBOSE);
 }

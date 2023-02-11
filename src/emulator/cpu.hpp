@@ -16,5 +16,4 @@ public:
 private:
     RegisterSet regs;
     FlagRegister flags;
-    Gameboy* system;
 };

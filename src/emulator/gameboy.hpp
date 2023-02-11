@@ -20,6 +20,5 @@ public:
     void dumpSystem();
 
 private:
-    CPU cpu;
-    Memory mem;
+
 };
