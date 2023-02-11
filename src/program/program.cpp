@@ -10,7 +10,7 @@
 #include "../emulator/gameboy.hpp"
 #include <SDL_events.h>
 
-#define VERSION "0.2.0"
+#define VERSION "0.2.1"
 
 using namespace Program;
 using std::string, Logger::log, std::unique_ptr, std::make_unique;

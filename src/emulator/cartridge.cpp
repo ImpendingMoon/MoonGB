@@ -30,7 +30,7 @@ void Cartridge::initCartridge(const string& _rom_file_path)
         throw std::invalid_argument("File is not a .gb or .gbc ROM!");
     }
 
-    RomFile.open(_rom_file_path);
+    RomFile.open(_rom_file_path, std::ios_base::in | std::ios_base::binary);
 
     if(!RomFile)
     {
@@ -159,7 +159,7 @@ void Cartridge::loadCartridge(Memory& mem)
         try {
             MemoryBank bank{};
             bank.data.reserve(0x4000);
-            RomFile.read((char*)(bank.data.data()), bank.data.size());
+            RomFile.read((char*)(bank.data.data()), 0x4000);
             rom_banks.push_back(bank);
 
         } catch(std::exception& ex) {

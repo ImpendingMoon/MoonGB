@@ -298,8 +298,7 @@ void Memory::loadROM0(const std::array<uint8_t, 0x4000>& data)
 void Memory::loadROM1(const std::vector<MemoryBank>& data, uint16_t bank_amount)
 {
     ROM_bank_amount = bank_amount;
-    ROM1.reserve(bank_amount);
-    std::copy(data.begin(), data.end(), ROM1.begin());
+    ROM1 = data;
 }
 
 
