@@ -27,6 +27,8 @@ protected:
     // A list of widget id's that the menu has created
     std::vector<long> widget_ids;
     // Staged widgets ready to be added to a GUIContainer
-    std::vector<std::unique_ptr<Widget>> widgets;
+    std::vector<std::shared_ptr<Widget>> widgets;
+    // Pointer to the loaded GUIController
+    GUIController* guiController;
 };
 }

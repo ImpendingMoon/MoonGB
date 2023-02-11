@@ -16,7 +16,7 @@ GUI::GUIController::~GUIController() = default;
 void GUI::GUIController::sendClick()
 {
     // If there are no widgets, stop
-    if(widgets.size() == 0) { return; }
+    if(widgets.empty()) { return; }
 
     SDL_Point mousepos;
     SDL_GetMouseState(&mousepos.x, &mousepos.y);

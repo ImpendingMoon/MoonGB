@@ -1,5 +1,6 @@
 #include "memory.hpp"
 #include "../program/logger.hpp"
+#include <filesystem>
 
 using Logger::log, fmt::format;
 
@@ -14,14 +15,17 @@ Memory::Memory()
     IEReg.data.resize(0x0001);
 }
 
-Memory::~Memory() = default;
+Memory::~Memory()
+{
+    if(p_ERAM.is_open()) { p_ERAM.close(); }
+}
 
 
 
 // Reads a byte from memory
 uint8_t Memory::readByte(uint16_t address)
 {
-    readByte(address, false);
+    return readByte(address, false);
 }
 
 
@@ -53,8 +57,7 @@ uint8_t Memory::readByte(uint16_t address, bool ignore_lock)
         // ERAM
         if(address >= 0xA000 && address <= 0xBFFF)
         {
-            // TODO: Implement when Cartridge is implemented
-            return 0xFF;
+            return readERAMByte(ERAM_index, address - 0xA000);
         }
         // WRAM0
         if(address >= 0xC000 && address <= 0xCFFF)
@@ -142,8 +145,7 @@ uint8_t Memory::getByte(uint16_t address)
         // ERAM
         if(address >= 0xA000 && address <= 0xBFFF)
         {
-            // TODO: Implement when Cartridge is implemented
-            return 0x00;
+            return readERAMByte(ERAM_index, address - 0xA000);
         }
         // WRAM0
         if(address >= 0xC000 && address <= 0xCFFF)
@@ -218,7 +220,7 @@ void Memory::writeByte(uint16_t address, uint8_t data)
         // ERAM
         if(address >= 0xA000 && address <= 0xBFFF)
         {
-            // TODO: Implement when Cartridge is implemented
+            writeERAMByte(ERAM_index, address - 0xA000, data);
             return;
         }
         // WRAM0
@@ -285,6 +287,71 @@ void Memory::writeByte(uint16_t address, uint8_t data)
 
 
 
+// Copies an array of 0x4000 bytes into ROM0
+void Memory::loadROM0(const std::array<uint8_t, 0x4000>& data)
+{
+    std::copy(data.begin(), data.end(), ROM0.data.begin());
+}
+
+
+// Copies a vector of MemoryBanks into ROM1
+void Memory::loadROM1(const std::vector<MemoryBank>& data, uint16_t bank_amount)
+{
+    ROM_bank_amount = bank_amount;
+    ROM1.reserve(bank_amount);
+    std::copy(data.begin(), data.end(), ROM1.begin());
+}
+
+
+// Sets the currently selected ROM1 bank
+void Memory::setROM1Index(const uint8_t& index)
+{
+    ROM1_index = index;
+}
+
+
+// Sets the currently selected ERAM bank
+void Memory::setERAM(const uint16_t& _bank_amount,
+             bool _persistent,
+             const std::string& _sav_file_path,
+             BankController _mbc)
+{
+    ERAM_bank_amount = _bank_amount;
+    ERAM_persistent = _persistent;
+    mbc = _mbc;
+    sav_file_path = _sav_file_path;
+
+    if(ERAM_persistent)
+    {
+        // Open as out-only, to make sure the file is created
+        std::ofstream temp(_sav_file_path, std::fstream::out);
+        temp.close();
+
+        p_ERAM.open(_sav_file_path, std::fstream::out
+                                    | std::fstream::in
+                                    | std::fstream::binary);
+
+        if(!p_ERAM)
+        {
+            log("MEMORY: Could not open .sav file! Saves will not be permanent!",
+                Logger::logERROR);
+        }
+
+        // Ensure that the .sav file is the correct size
+        size_t target_size = ERAM_bank_amount * 0x2000;
+        if(p_ERAM && std::filesystem::file_size(_sav_file_path) != target_size)
+        {
+            std::filesystem::resize_file(_sav_file_path, target_size);
+        }
+    }
+
+    if(!ERAM_persistent || !p_ERAM)
+    {
+        np_ERAM.resize(ERAM_bank_amount * 0x2000);
+    }
+}
+
+
 
 // Dumps the contents of memory to the log
 void Memory::dumpMemory()
@@ -316,4 +383,49 @@ void Memory::dumpMemory()
     }
 
     log("--END MEMORY DUMP--", Logger::logDEBUG);
+}
+
+
+
+
+uint8_t Memory::readERAMByte(uint8_t bank, uint16_t address)
+{
+    if(bank > ERAM_bank_amount)
+    {
+        log(format("MEMORY: Attempted read of invalid ERAM bank. "
+                   "Requested Bank: {:d} | Bank Amount: {:d}",
+                   bank, ERAM_bank_amount),
+            Logger::logDEBUG);
+    }
+
+    if(ERAM_persistent && p_ERAM)
+    {
+        p_ERAM.seekg(bank * address);
+        return p_ERAM.get();
+    }
+
+    return np_ERAM.at(bank * address);
+}
+
+
+
+
+void Memory::writeERAMByte(uint8_t bank, uint16_t address, uint8_t data)
+{
+    if(bank > ERAM_bank_amount)
+    {
+        log(format("MEMORY: Attempted write to invalid ERAM bank. "
+                   "Requested Bank: {:d} | Bank Amount: {:d}",
+                   bank, ERAM_bank_amount),
+            Logger::logDEBUG);
+    }
+
+    if(ERAM_persistent && p_ERAM)
+    {
+        p_ERAM.seekg(bank * address);
+        p_ERAM.put(data);
+        return;
+    }
+
+    np_ERAM.at(bank * address) = data;
 }

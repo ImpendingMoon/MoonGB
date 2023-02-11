@@ -1,7 +1,7 @@
 #include "gui_menu_controller.hpp"
-#include "../program.hpp"
 #include "menus/gui_main_menu.hpp"
 #include "menus/gui_motd_menu.hpp"
+#include "menus/gui_now_playing_menu.hpp"
 
 using std::string, Logger::log;
 using namespace GUI;
@@ -11,6 +11,7 @@ GUIController* guiController;
 // Menu objects
 MainMenu mainMenu;
 MOTD motd;
+NowPlaying nowPlaying;
 
 // Initializes and loads the main menu in a given GUIController
 void MenuController::initMenus(GUIController& gui)
@@ -20,10 +21,12 @@ void MenuController::initMenus(GUIController& gui)
     // Initialization
     mainMenu.initWidgets();
     motd.initWidgets();
+    nowPlaying.initWidgets();
 
     // Loading
     mainMenu.loadMenu(*guiController);
     motd.loadMenu(*guiController);
+    nowPlaying.loadMenu(*guiController);
 }
 
 
@@ -39,7 +42,7 @@ void MenuController::quitMenus()
 // Sets the game title in the Now Playing menu
 void MenuController::setNowPlaying(const string& display)
 {
-    // To be implemented when NowPlaying is spun off into its own menu
+    nowPlaying.setDisplay(display);
 }
 
 

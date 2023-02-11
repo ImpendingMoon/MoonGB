@@ -7,17 +7,18 @@
 #include "interface/gui_controller.hpp"
 #include "interface/gui_menu_controller.hpp"
 #include "../utility/filedialogue.hpp"
+#include "../emulator/gameboy.hpp"
 #include <SDL_events.h>
 
-#define VERSION "0.1.0"
+#define VERSION "0.2.0"
 
 using namespace Program;
-
-using std::string, Logger::log;
+using std::string, Logger::log, std::unique_ptr, std::make_unique;
 
 ProgramStates programState = STOPPED;
 
 GUI::GUIController gui;
+unique_ptr<Gameboy> gb;
 
 constexpr double MAX_FRAMERATE = 59.7;
 uint64_t frameStart, frameEnd;
@@ -73,6 +74,18 @@ void Program::beginProgramLoop()
                     gui.sendEvent(event);
                     break;
                 }
+
+                if(programState == RUNNING)
+                {
+                    switch(event.key.keysym.sym)
+                    {
+                    // ESC switches back to menu
+                    case SDLK_ESCAPE:
+                    {
+                        programState = MENU;
+                    }
+                    }
+                }
             } // End Keydown
             }
         }
@@ -117,6 +130,7 @@ void Program::beginProgramLoop()
 // Exits all program subcomponents
 void Program::quitProgram()
 {
+    if(gb) { gb.reset(); }
     Config::saveConfigFile();
     Logger::closeLogger();
     Window::closeWindow();
@@ -129,17 +143,50 @@ void Program::quitProgram()
 // or just switches focus back to the existing emulator
 void Program::startEmulator()
 {
-    // To be added when Emulator is added
-    string path = openFileDialogue("", "Gameboy ROM", {"GB", "GBC"});
+    // If emulator already running, just switch to it
+    if(gb)
+    {
+        programState = RUNNING;
+        return;
+    }
 
-    if(!path.empty()) { log("PROGRAM: Opened file " + path, Logger::logVERBOSE); }
+    bool emulator_started = false;
+
+    while(!emulator_started)
+    {
+        // To be added when Emulator is added
+        string path = openFileDialogue("", "Gameboy ROM", {"GB", "GBC"});
+
+        if(!path.empty())
+        {
+            log("PROGRAM: Opened file " + path, Logger::logVERBOSE);
+        } else {
+            break; // If path is "" then user cancelled
+        }
+
+        try {
+            gb = make_unique<Gameboy>(path);
+        } catch(std::runtime_error& ex) {
+            continue;
+        } catch(std::invalid_argument& ex) {
+            continue;
+        }
+
+        emulator_started = true;
+        programState = RUNNING;
+        GUI::MenuController::setNowPlaying(gb->getGameTitle());
+    }
 }
 
 
 // Closes the emulator if running and switches back to the menu.
 void Program::quitEmulator()
 {
-    // To be added when Emulator is added
+    programState = MENU;
+    gb->dumpSystem();
+    gb.reset();
+    GUI::MenuController::setNowPlaying("|\\_(~)_/|");
+    log("PROGRAM: Stopped emulator.", Logger::logVERBOSE);
 }
 
 

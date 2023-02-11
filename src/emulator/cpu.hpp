@@ -2,7 +2,6 @@
 
 #include "../core.hpp"
 #include "gbdefs.hpp"
-#include "gameboy.hpp"
 
 class CPU
 {
@@ -14,6 +13,6 @@ public:
     // Returns the number of cycles used.
     int execute();
 private:
-    RegisterSet regs;
-    FlagRegister flags;
+    RegisterSet regs{};
+    FlagRegister flags{};
 };

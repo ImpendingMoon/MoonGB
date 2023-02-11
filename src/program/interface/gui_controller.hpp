@@ -23,9 +23,11 @@ public:
     long addWidget(W& widget);
     // Removes the widget with the given ID number
     void removeWidget(long id);
-
+    // Accesses the widget with the given ID number
+    template<typename W>
+    W getWidget(long id);
 private:
-    std::vector<std::unique_ptr<Widget>> widgets;
+    std::vector<std::shared_ptr<Widget>> widgets;
     long focused_widget; // ID for the focused widget. -1 for no focus.
     long next_id; // The ID that will be assigned to the next widget
 
@@ -40,4 +42,13 @@ long GUI::GUIController::addWidget(W& widget)
     widget->setID(next_id);
     widgets.push_back(std::move(widget));
     return next_id++;
+}
+
+template<typename W>
+W GUI::GUIController::getWidget(long id)
+{
+    int index = getWidgetIndex(id);
+    if(index == -1) { return nullptr; }
+
+    return widgets.at(index);
 }

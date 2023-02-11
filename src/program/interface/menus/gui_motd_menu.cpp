@@ -3,7 +3,7 @@
 #include <ctime>
 
 using std::string, std::vector, fmt::format;
-using std::unique_ptr, std::make_unique, std::move, GUI::Label;
+using std::shared_ptr, std::make_shared, std::move, GUI::Label;
 
 const vector<string> messages = {
         "Fun Fact:\nThe Gameboy\nsold 118.69\nunits! Nice.",
@@ -20,7 +20,7 @@ void GUI::MOTD::initWidgets()
 {
     string motd = messages.at(getMOTDHash(getDate()));
 
-    unique_ptr<Label> label = make_unique<Label>();
+    shared_ptr<Label> label = make_shared<Label>();
     label->setDisplay(motd);
     label->setRect({58, 34, 0, 0});
     widgets.push_back(move(label));

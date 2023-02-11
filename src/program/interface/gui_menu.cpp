@@ -11,6 +11,8 @@ GUI::Menu::~Menu() = default;
 
 void GUI::Menu::loadMenu(GUIController &gui)
 {
+    guiController = &gui;
+
     for(auto& widget : widgets)
     {
         long id = gui.addWidget(widget);

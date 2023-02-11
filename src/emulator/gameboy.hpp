@@ -10,15 +10,25 @@
 class Gameboy
 {
 public:
-    Gameboy();
+    // Caller should catch std::invalid_argument and std::runtime_exception
+    Gameboy(const std::string& _rom_file_path);
     ~Gameboy();
 
     // Steps the components by one CPU instruction
     void step();
 
+    std::string getRomFilePath();
+    std::string getGameTitle();
+
     // Dumps emulated system info to the log
     void dumpSystem();
 
 private:
+    std::string rom_file_path;
+    std::string game_title;
 
+    CPU cpu;
+    PPU ppu;
+    Memory mem;
+    Cartridge cart;
 };
