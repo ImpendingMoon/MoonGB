@@ -199,15 +199,18 @@ inline std::string insToString(Instruction inst)
     using std::string, fmt::format;
 
     string t1;
-    if(inst.target1 == IMMEDIATE)
+    if(inst.target1 != NOTARGET)
     {
-        t1 = "n";
-    } else {
-        if(inst.t1_as_address)
+        if(inst.target1 == IMMEDIATE)
         {
-            t1 = format("[{}]", targetToString(inst.target1));
+            t1 = "n";
         } else {
-            t1 = targetToString(inst.target1);
+            if(inst.t1_as_address)
+            {
+                t1 = format("[{}]", targetToString(inst.target1));
+            } else {
+                t1 = targetToString(inst.target1);
+            }
         }
     }
 
@@ -216,19 +219,19 @@ inline std::string insToString(Instruction inst)
     {
         if(inst.target2 == IMMEDIATE)
         {
-            t2 = "n";
+            t2 = ", n";
         } else {
             if(inst.t2_as_address)
             {
-                t2 = format("[{}]", targetToString(inst.target2));
+                t2 = format(", [{}]", targetToString(inst.target2));
             } else {
-                t2 = targetToString(inst.target2);
+                t2 = ", " + targetToString(inst.target2);
             }
         }
     }
 
     // Format in Intel-like assembly syntax
-    return format("{} {} {} | Origin ${:04X} | Opcode 0x{:02X}",
+    return format("{} {}{} | Origin ${:04X} | Opcode 0x{:02X}",
                   inst.mnemonic, t1, t2, inst.origin, inst.opcode);
 }
 

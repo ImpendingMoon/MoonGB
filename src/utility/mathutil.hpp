@@ -64,6 +64,12 @@ namespace Util
         return ((a & 0xF) + (b & 0xF)) > 0xF;
     }
 
+    // Returns whether a uint8_t subtraction (a - b) will half-carry (upper nibble to lower nibble)
+    inline bool checkHCSub(uint16_t a, uint16_t b)
+    {
+        return ((a & 0xF) < (b & 0xF));
+    }
+
     // Returns whether an uint8_t subtraction (a - b) will underflow
     inline bool checkUFSub(uint8_t a, uint8_t b)
     {

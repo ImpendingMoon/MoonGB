@@ -10,7 +10,7 @@
 #include "../emulator/gameboy.hpp"
 #include <SDL_events.h>
 
-#define VERSION "0.2.1"
+#define VERSION "0.3.0-dev"
 
 using namespace Program;
 using std::string, Logger::log, std::unique_ptr, std::make_unique;
@@ -102,10 +102,26 @@ void Program::beginProgramLoop()
         }
         case RUNNING:
         {
+            if(!gb)
+            {
+                log("PROGRAM: Entered RUNNING without valid emulated system!",
+                    Logger::logERROR);
+                programState = MENU;
+                break;
+            }
+
+            while(gb->getCycle() < gb->getCyclesPerFrame() && programState == RUNNING)
+            {
+                gb->step();
+            }
+            gb->resetCycle();
+            log("PROGRAM: Finished frame.", Logger::logEXTREME);
+
             break;
         }
         case STOPPED:
         {
+            if(gb) { quitEmulator(); }
             programState = MENU;
         }
         case EXITING: {}

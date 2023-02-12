@@ -158,7 +158,7 @@ void Cartridge::loadCartridge(Memory& mem)
     {
         try {
             MemoryBank bank{};
-            bank.data.reserve(0x4000);
+            bank.data.resize(0x4000);
             RomFile.read((char*)(bank.data.data()), 0x4000);
             rom_banks.push_back(bank);
 

@@ -12,6 +12,8 @@ int main(int argc, char* argv[])
     // If on Linux, make sure program isn't running as root or sudo, since we
     // place files into (probably) either the /usr/local/bin/ or /home/ folder
     checkForRoot();
+    // Fix stdout on CLion Debug in Windows
+    setvbuf(stdout, NULL, _IONBF, 0);
 
     Program::initProgram();
 

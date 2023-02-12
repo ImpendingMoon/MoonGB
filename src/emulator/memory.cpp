@@ -8,11 +8,18 @@ Memory::Memory()
 {
     // Resize static blocks to correct sizes
     ROM0.data.resize(0x4000);
+    VRAM[0].data.resize(0x2000);
+    VRAM[1].data.resize(0x2000);
     WRAM0.data.resize(0x1000);
     OAM.data.resize(0x00A0);
     IOReg.data.resize(0x0080);
     HRAM.data.resize(0x007F);
     IEReg.data.resize(0x0001);
+
+    for(int i = 0; i < WRAM1.size(); i++)
+    {
+        WRAM1[i].data.resize(0x1000);
+    }
 }
 
 Memory::~Memory()
@@ -200,14 +207,15 @@ void Memory::writeByte(uint16_t address, uint8_t data)
         // ROM0
         if(address >= 0x0000 && address <= 0x3FFF)
         {
-            if(!ROM0.is_locked) { ROM0.data.at(address) = data; }
+            log(format("MEMORY: Attempted write to ROM! Address: ${:04X}", address),
+                Logger::logDEBUG);
             return;
         }
         // ROM1
         if(address >= 0x4000 && address <= 0x7FFF)
         {
-            auto &mb = ROM1.at(ROM1_index);
-            if(!mb.is_locked) { mb.data.at(address - 0x4000) = data; }
+            log(format("MEMORY: Attempted write to ROM! Address: ${:04X}", address),
+                Logger::logDEBUG);
             return;
         }
         // VRAM
