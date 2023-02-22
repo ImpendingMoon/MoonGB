@@ -16,7 +16,7 @@ Memory::Memory()
     HRAM.data.resize(0x007F);
     IEReg.data.resize(0x0001);
 
-    for(int i = 0; i < WRAM1.size(); i++)
+    for(size_t i = 0; i < WRAM1.size(); i++)
     {
         WRAM1[i].data.resize(0x1000);
     }
@@ -358,6 +358,21 @@ void Memory::setERAM(const uint16_t& _bank_amount,
     }
 }
 
+
+
+// Sets locks for PPU
+void Memory::setVRAMLock(bool value)
+{
+    for(auto bank : VRAM)
+    {
+        bank.is_locked = value;
+    }
+}
+
+void Memory::setOAMLock(bool value)
+{
+    OAM.is_locked = value;
+}
 
 
 // Dumps the contents of memory to the log

@@ -27,6 +27,7 @@ Gameboy::~Gameboy() = default;
 void Gameboy::step()
 {
     int cycles = cpu.execute(mem);
+    ppu.step(cycles, mem);
     cycle += cycles;
 }
 
@@ -47,6 +48,7 @@ void Gameboy::resetCycle()
 void Gameboy::dumpSystem()
 {
     cpu.dumpCPU();
+    ppu.dumpPPU();
     cart.dumpCartridge();
     mem.dumpMemory();
 }

@@ -50,4 +50,10 @@ namespace Window
     // Draws a string to the screen using Tile3 of the color palette
     void drawString(const std::string& message, int x, int y);
 
+    struct PImage
+    {
+        std::vector<PaletteID> data;
+        int width;
+        int height;
+    };
 };

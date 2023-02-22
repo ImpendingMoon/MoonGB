@@ -31,6 +31,10 @@ public:
                       const std::string& _sav_file_path,
                       BankController mbc);
 
+    // Sets locks for PPU
+    void setVRAMLock(bool value);
+    void setOAMLock(bool value);
+
     // Dumps the contents of memory to the log
     void dumpMemory();
 
